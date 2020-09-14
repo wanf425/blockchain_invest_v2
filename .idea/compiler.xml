@@ -6,14 +6,21 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="blockchainv2-app" />
-        <module name="blockchainv2-client" />
-        <module name="blockchainv2-controller" />
-        <module name="blockchainv2-domain" />
-        <module name="blockchainv2-infrastructure" />
+        <module name="blockchainivest-app" />
+        <module name="blockchainivest-client" />
+        <module name="blockchainivest-controller" />
+        <module name="blockchainivest-domain" />
+        <module name="blockchainivest-infrastructure" />
+        <module name="blockchainivest-old" />
         <module name="start" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="8" />
+    <bytecodeTargetLevel target="8">
+      <module name="blockchainv2-app" target="1.8" />
+      <module name="blockchainv2-client" target="1.8" />
+      <module name="blockchainv2-controller" target="1.8" />
+      <module name="blockchainv2-domain" target="1.8" />
+      <module name="blockchainv2-infrastructure" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
 </project>
