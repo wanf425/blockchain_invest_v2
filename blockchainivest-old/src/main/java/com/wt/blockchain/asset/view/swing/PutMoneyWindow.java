@@ -12,8 +12,9 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
-import com.wt.blockchain.asset.dao.CoinDetailDao;
-import com.wt.blockchain.asset.dao.CoinSummaryDao;
+import com.wt.blockchainivest.repository.dao.CoinDetailDao;
+import com.wt.blockchainivest.repository.dao.CoinSummaryDao;
+import org.springframework.stereotype.Component;
 
 public class PutMoneyWindow extends BaseWindow {
 

@@ -17,11 +17,12 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.wt.blockchain.asset.dao.CoinInfoDao;
-import com.wt.blockchain.asset.dao.CoinSummaryDao;
-import com.wt.blockchain.asset.dto.CoinInfo;
-import com.wt.blockchain.asset.util.CommonUtil;
-import com.wt.blockchain.asset.util.LogUtil;
+import com.wt.blockchainivest.repository.dao.CoinInfoDao;
+import com.wt.blockchainivest.repository.dao.CoinSummaryDao;
+import com.wt.blockchainivest.repository.dto.CoinInfoDto;
+import com.wt.blockchainivest.domain.util.CommonUtil;
+import com.wt.blockchainivest.domain.util.LogUtil;
+import org.springframework.stereotype.Component;
 
 /**
  * 信息录入
@@ -118,7 +119,7 @@ public class CoinInfoWindow extends BaseWindow {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					Gson gson = new Gson();
-					List<CoinInfo> list = gson.fromJson(cionInfoEP.getText(), new TypeToken<List<CoinInfo>>() {
+					List<CoinInfoDto> list = gson.fromJson(cionInfoEP.getText(), new TypeToken<List<CoinInfoDto>>() {
 					}.getType());
 					coinInfoDao.updateAll(list);
 
@@ -139,7 +140,7 @@ public class CoinInfoWindow extends BaseWindow {
 
 	private void initDate() {
 		// 货币信息
-		List<CoinInfo> list = coinInfoDao.queryAllList();
+		List<CoinInfoDto> list = coinInfoDao.queryAllList();
 		Gson gson = new Gson();
 		String coinInfo = gson.toJson(list);
 		cionInfoEP.setText(CommonUtil.formatJson(coinInfo));

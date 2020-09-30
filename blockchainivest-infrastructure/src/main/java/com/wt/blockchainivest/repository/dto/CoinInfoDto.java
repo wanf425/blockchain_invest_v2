@@ -1,6 +1,8 @@
-package com.wt.blockchain.asset.dto;
+package com.wt.blockchainivest.repository.dto;
 
-public class CoinInfo extends BaseDto {
+import com.wt.blockchainivest.repository.dto.BaseDto;
+
+public class CoinInfoDto extends BaseDto {
 
 	private String coin_name;
 	private Double market_price;

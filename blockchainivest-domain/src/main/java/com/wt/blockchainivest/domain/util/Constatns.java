@@ -1,6 +1,7 @@
-package com.wt.blockchain.asset.util;
+package com.wt.blockchainivest.domain.util;
 
-import com.wt.blockchain.asset.dto.CoinInfo;
+
+import com.wt.blockchainivest.domain.trasaction.CoinInfo;
 
 public class Constatns {
 

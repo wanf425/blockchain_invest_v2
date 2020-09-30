@@ -1,20 +1,21 @@
 package com.wt.blockchain.asset.view.swing;
 
 import com.mysql.cj.util.StringUtils;
-import com.wt.blockchain.asset.dao.CoinDetailDao;
-import com.wt.blockchain.asset.dao.CoinSummaryDao;
-import com.wt.blockchain.asset.dao.ConstantsDao;
-import com.wt.blockchain.asset.dto.CoinDetail;
-import com.wt.blockchain.asset.dto.CoinSummary;
-import com.wt.blockchain.asset.dto.Constants;
-import com.wt.blockchain.asset.util.CommonUtil;
-import com.wt.blockchain.asset.util.Constatns.ConstatnsKey;
-import com.wt.blockchain.asset.util.Constatns.Currency;
-import com.wt.blockchain.asset.util.Constatns.Market;
-import com.wt.blockchain.asset.util.Constatns.OpType;
-import com.wt.blockchain.asset.util.LogUtil;
-import com.wt.blockchain.asset.util.NumberUtil;
+import com.wt.blockchainivest.repository.dao.CoinDetailDao;
+import com.wt.blockchainivest.repository.dao.CoinSummaryDao;
+import com.wt.blockchainivest.repository.dao.ConstantsDao;
+import com.wt.blockchainivest.repository.dto.CoinSummaryDto;
+import com.wt.blockchainivest.repository.dto.ConstantsDto;
+import com.wt.blockchainivest.domain.util.CommonUtil;
+import com.wt.blockchainivest.domain.util.Constatns.ConstatnsKey;
+import com.wt.blockchainivest.domain.util.Constatns.Currency;
+import com.wt.blockchainivest.domain.util.Constatns.Market;
+import com.wt.blockchainivest.domain.util.Constatns.OpType;
+import com.wt.blockchainivest.domain.util.LogUtil;
+import com.wt.blockchainivest.domain.util.NumberUtil;
+import com.wt.blockchainivest.repository.dto.CoinDetailDto;
 import net.miginfocom.swing.MigLayout;
+import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import java.awt.*;
@@ -39,18 +40,18 @@ public class BuySellRecordsWindow extends BaseWindow {
     private CoinDetailDao coinDetailDao = new CoinDetailDao();
     private CoinSummaryDao coinSummaryDao = new CoinSummaryDao();
     private DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    private Map<String, CoinSummary> summaryMap = new HashMap<>();
+    private Map<String, CoinSummaryDto> summaryMap = new HashMap<>();
 
     private JFrame frame;
     private JLabel opTypeLA;
     private JLabel coinNameLA;
-    private JComboBox<Constants> opTypeCB;
-    private JComboBox<Constants> coinNameCB;
+    private JComboBox<ConstantsDto> opTypeCB;
+    private JComboBox<ConstantsDto> coinNameCB;
     private JLabel coinNumLA;
     private JTextField coinNumTF;
     private JLabel totalCostLA;
     private JTextField totalCostTF;
-    private JComboBox<Constants> totalCostCB;
+    private JComboBox<ConstantsDto> totalCostCB;
     private JLabel serviceChargePercentLA;
     private JTextField serviceChargePercentTF; // 手续费率
     private JLabel serviceChargeLA;
@@ -60,12 +61,12 @@ public class BuySellRecordsWindow extends BaseWindow {
     private JLabel avarangeLA;
     private JTextField avarangeTF;
     private JLabel opMarketLA;
-    private JComboBox<Constants> opMarketCB;
+    private JComboBox<ConstantsDto> opMarketCB;
     private JButton saveBtn;
     private JLabel totalCostUSDValue;
     private JLabel accountNumLA;
     private JLabel accountNum;
-    private JComboBox<Constants> serviceChargeCB; // 手续费单位
+    private JComboBox<ConstantsDto> serviceChargeCB; // 手续费单位
     private BuySellStreamWindow buySellStreamWindow;
 
     /**
@@ -85,6 +86,7 @@ public class BuySellRecordsWindow extends BaseWindow {
      */
     public static void main(String[] args) throws ParseException {
         EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 try {
                     new BuySellRecordsWindow(null);
@@ -102,13 +104,13 @@ public class BuySellRecordsWindow extends BaseWindow {
 
     public void refresh() {
         // 查询汇总数据
-        List<CoinSummary> list = coinSummaryDao.queryAll();
+        List<CoinSummaryDto> list = coinSummaryDao.queryAll();
         list.forEach(t -> summaryMap.put(t.getCoin_name(), t));
 
         this.frame.setVisible(true);
 
-        Constants c = (Constants) coinNameCB.getSelectedItem();
-        CoinSummary cs = summaryMap.get(c.getKey());
+        ConstantsDto c = (ConstantsDto) coinNameCB.getSelectedItem();
+        CoinSummaryDto cs = summaryMap.get(c.getKey());
         accountNum.setText(cs != null ? cs.getTotal_cost().toString() : "");
     }
 
@@ -124,13 +126,13 @@ public class BuySellRecordsWindow extends BaseWindow {
         opTypeLA = new JLabel("操作类型：");
         frame.getContentPane().add(opTypeLA, "cell 0 0,alignx trailing");
 
-        opTypeCB = new JComboBox<Constants>();
+        opTypeCB = new JComboBox<ConstantsDto>();
         frame.getContentPane().add(opTypeCB, "cell 1 0 2 1,growx");
 
         coinNameLA = new JLabel("币种：");
         frame.getContentPane().add(coinNameLA, "cell 0 1,alignx trailing");
 
-        coinNameCB = new JComboBox<Constants>();
+        coinNameCB = new JComboBox<ConstantsDto>();
         frame.getContentPane().add(coinNameCB, "cell 1 1 2 1,growx");
 
         coinNumLA = new JLabel("交易数量：");
@@ -153,13 +155,13 @@ public class BuySellRecordsWindow extends BaseWindow {
         frame.getContentPane().add(totalCostTF, "cell 1 4,growx");
         totalCostTF.setColumns(10);
 
-        totalCostCB = new JComboBox<Constants>();
+        totalCostCB = new JComboBox<ConstantsDto>();
         frame.getContentPane().add(totalCostCB, "cell 2 4,growx");
 
         opMarketLA = new JLabel("交易平台：");
         frame.getContentPane().add(opMarketLA, "cell 0 5,alignx trailing");
 
-        opMarketCB = new JComboBox<Constants>();
+        opMarketCB = new JComboBox<ConstantsDto>();
         frame.getContentPane().add(opMarketCB, "cell 1 5 2 1,growx");
 
         serviceChargePercentLA = new JLabel("手续费率(千分比)：");
@@ -175,7 +177,7 @@ public class BuySellRecordsWindow extends BaseWindow {
         frame.getContentPane().add(serviceChargeTF, "cell 1 7,growx");
         serviceChargeTF.setColumns(10);
 
-        serviceChargeCB = new JComboBox<Constants>();
+        serviceChargeCB = new JComboBox<ConstantsDto>();
         frame.getContentPane().add(serviceChargeCB, "cell 2 7,growx");
 
         opTimeLA = new JLabel("操作时间：");
@@ -229,11 +231,11 @@ public class BuySellRecordsWindow extends BaseWindow {
     private void changeAccountNum() {
 
         // 操作类型
-        Constants opType = (Constants) opTypeCB.getSelectedItem();
+        ConstantsDto opType = (ConstantsDto) opTypeCB.getSelectedItem();
         // 币种信息
 
-        Constants constants = (Constants) coinNameCB.getSelectedItem();
-        CoinSummary cs = summaryMap.get(constants.getValue());
+        ConstantsDto constants = (ConstantsDto) coinNameCB.getSelectedItem();
+        CoinSummaryDto cs = summaryMap.get(constants.getValue());
 
         Double accountNum = 0.0;
         Double coinNum = NumberUtil.toDouble(coinNumTF.getText());
@@ -351,8 +353,8 @@ public class BuySellRecordsWindow extends BaseWindow {
      * @return
      */
     private boolean isLegalTender() {
-        String totalCostCurrency = ((Constants) totalCostCB.getSelectedItem()).getKey();
-        String servcieChargeCurrency = ((Constants) serviceChargeCB.getSelectedItem()).getKey();
+        String totalCostCurrency = ((ConstantsDto) totalCostCB.getSelectedItem()).getKey();
+        String servcieChargeCurrency = ((ConstantsDto) serviceChargeCB.getSelectedItem()).getKey();
         return totalCostCurrency.equals(servcieChargeCurrency);
     }
 
@@ -361,16 +363,16 @@ public class BuySellRecordsWindow extends BaseWindow {
      */
     private void doSave() {
 
-        String opType = ((Constants) opTypeCB.getSelectedItem()).getKey();
-        String coinName = ((Constants) coinNameCB.getSelectedItem()).getKey();
+        String opType = ((ConstantsDto) opTypeCB.getSelectedItem()).getKey();
+        String coinName = ((ConstantsDto) coinNameCB.getSelectedItem()).getKey();
         String coinNum = coinNumTF.getText();
         String totalCost = totalCostTF.getText();
-        String totalCostCurrency = ((Constants) totalCostCB.getSelectedItem()).getKey();
-        String servcieChargeCurrency = ((Constants) serviceChargeCB.getSelectedItem()).getKey();
+        String totalCostCurrency = ((ConstantsDto) totalCostCB.getSelectedItem()).getKey();
+        String servcieChargeCurrency = ((ConstantsDto) serviceChargeCB.getSelectedItem()).getKey();
         String serviceCharge = serviceChargeTF.getText();
         String opTime = opTimeTF.getText();
         String avarangePrice = avarangeTF.getText();
-        String opMarket = ((Constants) opMarketCB.getSelectedItem()).getKey();
+        String opMarket = ((ConstantsDto) opMarketCB.getSelectedItem()).getKey();
 
         try {
             // 非空判断
@@ -382,7 +384,7 @@ public class BuySellRecordsWindow extends BaseWindow {
             }
 
             // 获取页面数据
-            CoinDetail cd = new CoinDetail();
+            CoinDetailDto cd = new CoinDetailDto();
             try {
                 cd.setOp_type(opType);
                 cd.setCoin_name(coinName);
@@ -428,11 +430,11 @@ public class BuySellRecordsWindow extends BaseWindow {
      */
     private void initDate() {
         // 操作类型 下拉框
-        List<Constants> opTypes = constantsDao.queryByType(ConstatnsKey.OP_TYPE);
+        List<ConstantsDto> opTypes = constantsDao.queryByType(ConstatnsKey.OP_TYPE);
         CommonUtil.initialComboBox(opTypes, opTypeCB, c -> c.getValue());
 
         // 币种 下拉框
-        List<Constants> coinNames = constantsDao.queryByType(ConstatnsKey.COIN_NAME);
+        List<ConstantsDto> coinNames = constantsDao.queryByType(ConstatnsKey.COIN_NAME);
         CommonUtil.initialComboBox(coinNames, coinNameCB, c -> c.getValue());
 
         // 手续费币种下拉框
@@ -444,7 +446,7 @@ public class BuySellRecordsWindow extends BaseWindow {
         });
 
         // 货币类型 下拉框
-        List<Constants> currencyType = constantsDao.queryByType(ConstatnsKey.CURRENCY_TYPE);
+        List<ConstantsDto> currencyType = constantsDao.queryByType(ConstatnsKey.CURRENCY_TYPE);
         CommonUtil.initialComboBox(currencyType, totalCostCB, c -> c.getValue());
         currencyType.forEach(t -> {
             if (Currency.USDT.equals(t.getKey())) {
@@ -453,7 +455,7 @@ public class BuySellRecordsWindow extends BaseWindow {
         });
 
         // 交易平台 下拉框
-        List<Constants> market = constantsDao.queryByType(ConstatnsKey.MARKET);
+        List<ConstantsDto> market = constantsDao.queryByType(ConstatnsKey.MARKET);
         CommonUtil.initialComboBox(market, opMarketCB, c -> c.getValue());
         market.forEach(t -> {
             if (Market.HUOBI.equals(t.getKey())) {

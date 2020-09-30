@@ -16,14 +16,16 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import com.mysql.cj.util.StringUtils;
-import com.wt.blockchain.asset.dao.CoinDetailDao;
-import com.wt.blockchain.asset.dao.CoinSummaryDao;
-import com.wt.blockchain.asset.dao.ConstantsDao;
-import com.wt.blockchain.asset.dto.CoinSummary;
-import com.wt.blockchain.asset.dto.Constants;
-import com.wt.blockchain.asset.util.CommonUtil;
-import com.wt.blockchain.asset.util.Constatns.ConstatnsKey;
-import com.wt.blockchain.asset.util.NumberUtil;
+import com.wt.blockchainivest.domain.trasaction.Constants;
+import com.wt.blockchainivest.repository.dao.CoinDetailDao;
+import com.wt.blockchainivest.repository.dao.CoinSummaryDao;
+import com.wt.blockchainivest.repository.dao.ConstantsDao;
+import com.wt.blockchainivest.repository.dto.CoinSummaryDto;
+import com.wt.blockchainivest.repository.dto.ConstantsDto;
+import com.wt.blockchainivest.domain.util.CommonUtil;
+import com.wt.blockchainivest.domain.util.Constatns.ConstatnsKey;
+import com.wt.blockchainivest.domain.util.NumberUtil;
+import org.springframework.stereotype.Component;
 
 public class RefundWindow extends BaseWindow {
 
@@ -31,11 +33,12 @@ public class RefundWindow extends BaseWindow {
 	private ConstantsDao constantsDao = new ConstantsDao();
 	private CoinSummaryDao coinSummaryDao = new CoinSummaryDao();
 	private CoinDetailDao coinDetailDao = new CoinDetailDao();
-	private CoinSummary coinSummary = new CoinSummary();
+	private CoinSummaryDto coinSummaryDto = new CoinSummaryDto();
 
 	private JFrame frame;
 	private JTextField expectCoinNumTF; // 预期数量文本框
-	private JComboBox<Constants> coinNameCB = new JComboBox<Constants>(); // 币种下拉框
+	private JComboBox<ConstantsDto> coinNameCB = new JComboBox<ConstantsDto>(); //
+	// 币种下拉框
 	private JButton saveBtn = new JButton("保存"); // 保存按钮
 	private JLabel currentCoinNumValue = new JLabel(""); // 当前数量
 	private JLabel refundNumValue = new JLabel(""); // 预期数量
@@ -47,6 +50,7 @@ public class RefundWindow extends BaseWindow {
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				try {
 					new RefundWindow();
@@ -72,13 +76,13 @@ public class RefundWindow extends BaseWindow {
 	private void refresh() {
 		frame.setVisible(true);
 
-		Constants c = (Constants) coinNameCB.getSelectedItem();
-		List<CoinSummary> csList = coinSummaryDao.query(c.getKey());
+		ConstantsDto c = (ConstantsDto) coinNameCB.getSelectedItem();
+		List<CoinSummaryDto> csList = coinSummaryDao.query(c.getKey());
 
 		if (csList != null && csList.size() > 0) {
-			coinSummary = csList.get(0);
+			coinSummaryDto = csList.get(0);
 		}
-		currentCoinNumValue.setText(coinSummary.getCoin_num().toString());
+		currentCoinNumValue.setText(coinSummaryDto.getCoin_num().toString());
 		expectCoinNumTF.setText("");
 		refundNumValue.setText("");
 	}
@@ -191,7 +195,8 @@ public class RefundWindow extends BaseWindow {
 
 	private void initDate() {
 		// 币种 下拉框
-		List<Constants> coinNames = constantsDao.queryByType(ConstatnsKey.COIN_NAME);
+		List<ConstantsDto> coinNames =
+				constantsDao.queryByType(ConstatnsKey.COIN_NAME);
 		CommonUtil.initialComboBox(coinNames, coinNameCB, c -> c.getValue());
 	}
 
@@ -201,11 +206,11 @@ public class RefundWindow extends BaseWindow {
 	private void addListener() {
 		coinNameCB.addItemListener(t -> {
 			Constants c = (Constants) t.getItem();
-			List<CoinSummary> csList = coinSummaryDao.query(c.getKey());
+			List<CoinSummaryDto> csList = coinSummaryDao.query(c.getKey());
 
 			if (csList != null && csList.size() > 0) {
-				coinSummary = csList.get(0);
-				currentCoinNumValue.setText(coinSummary.getCoin_num().toString());
+				coinSummaryDto = csList.get(0);
+				currentCoinNumValue.setText(coinSummaryDto.getCoin_num().toString());
 			}
 
 			Double refund = calRefund();

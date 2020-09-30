@@ -1,12 +1,14 @@
-package com.wt.blockchain.asset.dto;
+package com.wt.blockchainivest.repository.dto;
 
-public class Constants extends BaseDto {
+import com.wt.blockchainivest.repository.dto.BaseDto;
 
-	public Constants() {
+public class ConstantsDto extends BaseDto {
+
+	public ConstantsDto() {
 
 	}
 
-	public Constants(String key, String value) {
+	public ConstantsDto(String key, String value) {
 		this.key = key;
 		this.value = value;
 	}

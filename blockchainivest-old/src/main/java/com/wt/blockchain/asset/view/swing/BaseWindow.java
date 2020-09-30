@@ -1,5 +1,7 @@
 package com.wt.blockchain.asset.view.swing;
 
+import org.springframework.stereotype.Component;
+
 import javax.swing.JFrame;
 
 public abstract class BaseWindow extends JFrame {

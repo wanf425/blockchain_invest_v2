@@ -1,8 +1,10 @@
-package com.wt.blockchain.asset.dto;
+package com.wt.blockchainivest.repository.dto;
+
+import com.wt.blockchainivest.repository.dto.BaseDto;
 
 import java.util.Date;
 
-public class EarningDto extends BaseDto {
+public class EarningDto  extends BaseDto {
 
 	private int id;
 	private Date settlement_date; // 结算日期

@@ -1,4 +1,4 @@
-package com.wt.blockchain.asset.util;
+package com.wt.blockchainivest.domain.util;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -21,7 +21,6 @@ public class NumberUtil {
 	 * 
 	 * @param base
 	 * @param augend
-	 * @param nullValue
 	 * @return
 	 */
 	public static Double add(Object base, Object augend) {
@@ -33,7 +32,6 @@ public class NumberUtil {
 	 * 
 	 * @param base
 	 * @param divisor
-	 * @param nullValue
 	 * @return
 	 */
 	public static Double divide(Object base, Object divisor) {
@@ -45,7 +43,6 @@ public class NumberUtil {
 	 * 
 	 * @param base
 	 * @param multiplicand
-	 * @param nullValue
 	 * @return
 	 */
 	public static Double multiply(Object base, Object multiplicand) {

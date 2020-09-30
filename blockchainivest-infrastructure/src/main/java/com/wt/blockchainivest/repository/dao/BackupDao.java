@@ -1,14 +1,15 @@
-package com.wt.blockchain.asset.dao;
+package com.wt.blockchainivest.repository.dao;
 
-import com.wt.blockchain.asset.dto.CoinDetail;
-import com.wt.blockchain.asset.util.Constatns.ConstatnsKey;
-import com.wt.blockchain.asset.util.Constatns.MaxDetailID;
-import com.wt.blockchain.asset.util.LogUtil;
+import com.wt.blockchainivest.domain.util.Constatns.ConstatnsKey;
+import com.wt.blockchainivest.domain.util.Constatns.MaxDetailID;
+import com.wt.blockchainivest.domain.util.LogUtil;
+import com.wt.blockchainivest.repository.dao.BaseDao;
+import com.wt.blockchainivest.repository.dto.CoinDetailDto;
 import com.xiaoleilu.hutool.db.Entity;
 
 import java.util.List;
 
-public class BackupDao extends BaseDao<CoinDetail> {
+public class BackupDao extends BaseDao<CoinDetailDto> {
 
     /**
      * 备份

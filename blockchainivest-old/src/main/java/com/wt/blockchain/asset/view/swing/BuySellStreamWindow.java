@@ -1,6 +1,27 @@
 package com.wt.blockchain.asset.view.swing;
 
-import java.awt.EventQueue;
+import com.wt.blockchainivest.domain.gateway.CoinInfoGateway;
+import com.wt.blockchainivest.domain.util.CommonUtil;
+import com.wt.blockchainivest.domain.util.Constatns;
+import com.wt.blockchainivest.domain.util.Constatns.ConstatnsKey;
+import com.wt.blockchainivest.domain.util.LogUtil;
+import com.wt.blockchainivest.domain.util.NumberUtil;
+import com.wt.blockchainivest.repository.dao.CoinSummaryDao;
+import com.wt.blockchainivest.repository.dao.ConstantsDao;
+import com.wt.blockchainivest.repository.dto.CoinSummaryDto;
+import com.wt.blockchainivest.repository.dto.ConstantsDto;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import javax.swing.*;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.border.EmptyBorder;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -8,47 +29,19 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.border.EmptyBorder;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableModel;
-import javax.swing.table.TableRowSorter;
-
-import com.wt.blockchain.asset.dao.CoinSummaryDao;
-import com.wt.blockchain.asset.dao.ConstantsDao;
-import com.wt.blockchain.asset.dto.CoinSummary;
-import com.wt.blockchain.asset.dto.Constants;
-import com.wt.blockchain.asset.util.CommonUtil;
-import com.wt.blockchain.asset.util.Constatns;
-import com.wt.blockchain.asset.util.Constatns.ConstatnsKey;
-import com.wt.blockchain.asset.util.Constatns.Currency;
-import com.wt.blockchain.asset.util.LogUtil;
-import com.wt.blockchain.asset.util.NumberUtil;
-import org.springframework.stereotype.Component;
-
 @Component
 public class BuySellStreamWindow extends BaseWindow {
-
 	private static final long serialVersionUID = 1L;
-
+	@Autowired
+	private CoinInfoGateway coinInfoRepository;
 	private CoinSummaryDao coinSummaryDao = new CoinSummaryDao();
 	private ConstantsDao constantsDao = new ConstantsDao();
-	private List<CoinSummary> summaryList = null;
+	private List<CoinSummaryDto> summaryList = null;
 	private JPanel contentPane;
 	private JTable table;
 
 	private JLabel coinNameLA = new JLabel("币种：");
-	private JComboBox<Constants> coinNameCB = new JComboBox<Constants>();
+	private JComboBox<ConstantsDto> coinNameCB = new JComboBox<ConstantsDto>();
 	private JButton queryBtn = new JButton("查询");
 	private JButton buySellBtn = new JButton("买卖操作");
 	private JButton assetBtn = new JButton("资产统计");
@@ -66,11 +59,16 @@ public class BuySellStreamWindow extends BaseWindow {
 
 	private String queryCoinName = "";
 
-	public static void init() {
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				try {
 					BuySellStreamWindow frame = new BuySellStreamWindow();
+					frame.init();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -79,17 +77,7 @@ public class BuySellStreamWindow extends BaseWindow {
 		});
 	}
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		 init();
-	}
-
-	/**
-	 * Create the frame.
-	 */
-	public BuySellStreamWindow() {
+	public void init() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1024, 400);
 		contentPane = new JPanel();
@@ -151,6 +139,13 @@ public class BuySellStreamWindow extends BaseWindow {
 		addListener();
 	}
 
+	/**
+	 * Create the frame.
+	 */
+	public BuySellStreamWindow() {
+
+	}
+
 	public AbstractTableModel getTableModel() {
 		return new AbstractTableModel() {
 			String[] names = { "币种", "总数量", "总花费(USD)", "购买均价(USD)", "当前市价(USD)", "收益率(%)", "收益数(USD)", "资产占比(%)",
@@ -158,6 +153,7 @@ public class BuySellStreamWindow extends BaseWindow {
 
 			private static final long serialVersionUID = 4354562018087682852L;
 
+			@Override
 			public Class getColumnClass(int column) {
 				Class returnValue;
 				if ((column >= 0) && (column < getColumnCount())) {
@@ -168,18 +164,22 @@ public class BuySellStreamWindow extends BaseWindow {
 				return returnValue;
 			}
 
+			@Override
 			public int getColumnCount() {
 				return names.length;
 			}
 
+			@Override
 			public int getRowCount() {
 				return getData().size();
 			}
 
+			@Override
 			public String getColumnName(int column) {
 				return names[column];
 			}
 
+			@Override
 			public Object getValueAt(int row, int col) {
 				switch (col) {
 				case (0): {
@@ -216,7 +216,7 @@ public class BuySellStreamWindow extends BaseWindow {
 		};
 	}
 
-	public List<CoinSummary> getData() {
+	public List<CoinSummaryDto> getData() {
 		if (summaryList == null) {
 			summaryList = querySummary();
 		}
@@ -229,21 +229,22 @@ public class BuySellStreamWindow extends BaseWindow {
 	 */
 	private void initDate() {
 		// 币种 下拉框
-		List<Constants> coinNames = constantsDao.queryByType(ConstatnsKey.COIN_NAME);
-		coinNames.add(0, new Constants("", "全部"));
+		List<ConstantsDto> coinNames =
+				constantsDao.queryByType(ConstatnsKey.COIN_NAME);
+		coinNames.add(0, new ConstantsDto("", "全部"));
 		CommonUtil.initialComboBox(coinNames, coinNameCB, c -> c.getValue());
 	}
 
-	private List<CoinSummary> querySummary() {
-		List<CoinSummary> list = coinSummaryDao.querySummary(queryCoinName);
-		List<CoinSummary> result = new ArrayList<CoinSummary>();
+	private List<CoinSummaryDto> querySummary() {
+		List<CoinSummaryDto> list = coinSummaryDao.querySummary(queryCoinName);
+		List<CoinSummaryDto> result = new ArrayList<CoinSummaryDto>();
 
 		Double totalNum = 0.0;
 		Double coinNum = 0.0;
 		Double cash = 0.0;
 		Double usdtNum = 0.0;
 
-		for (CoinSummary cs : list) {
+		for (CoinSummaryDto cs : list) {
 //			if (cs.getCoin_num() == 0 && !Currency.RMB.equals(cs.getCoin_name())
 //					&& !Currency.USDT.equals(cs.getCoin_name())) {
 //				continue;
@@ -262,7 +263,7 @@ public class BuySellStreamWindow extends BaseWindow {
 			}
 		}
 
-		Double rate = CommonUtil.getExchangeRate();
+		Double rate = coinInfoRepository.getExchangeRate();
 
 		StringBuffer sb = new StringBuffer("");
 		sb.append("总资产：").append(NumberUtil.formateNum(totalNum)).append("（")
@@ -294,7 +295,7 @@ public class BuySellStreamWindow extends BaseWindow {
 		queryBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				queryCoinName = ((Constants) coinNameCB.getSelectedItem()).getKey();
+				queryCoinName = ((ConstantsDto) coinNameCB.getSelectedItem()).getKey();
 				doQuery();
 			}
 		});
@@ -304,6 +305,7 @@ public class BuySellStreamWindow extends BaseWindow {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				EventQueue.invokeLater(new Runnable() {
+					@Override
 					public void run() {
 						try {
 							if (buySellRecordsWindow == null) {
@@ -323,6 +325,7 @@ public class BuySellStreamWindow extends BaseWindow {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				EventQueue.invokeLater(new Runnable() {
+					@Override
 					public void run() {
 						try {
 							if (putMoneyWindow == null) {
@@ -340,8 +343,10 @@ public class BuySellStreamWindow extends BaseWindow {
 
 		// 信息录入
 		infoBtn.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				EventQueue.invokeLater(new Runnable() {
+					@Override
 					public void run() {
 						try {
 							if (coinInfoWindow == null) {
@@ -359,6 +364,7 @@ public class BuySellStreamWindow extends BaseWindow {
 
 		// 备份
 		backUpBtn.addActionListener(t -> EventQueue.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				try {
 					if (backupWindow == null) {
@@ -374,6 +380,7 @@ public class BuySellStreamWindow extends BaseWindow {
 
 		// 资产统计 TODO
 		assetBtn.addActionListener(t -> EventQueue.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				try {
 					if (earningWindow == null) {
@@ -395,6 +402,7 @@ public class BuySellStreamWindow extends BaseWindow {
 					String coinName = summaryList.get(getSelectedRowIndex()).getCoin_name();
 
 					EventQueue.invokeLater(new Runnable() {
+						@Override
 						public void run() {
 							try {
 								if (historyWindow == null) {

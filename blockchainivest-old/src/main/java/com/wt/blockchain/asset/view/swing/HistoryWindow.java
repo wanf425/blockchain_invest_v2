@@ -17,11 +17,12 @@ import javax.swing.JTextPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
 import com.mysql.cj.util.StringUtils;
-import com.wt.blockchain.asset.dao.CoinDetailDao;
-import com.wt.blockchain.asset.dto.CoinDetail;
-import com.wt.blockchain.asset.util.CommonUtil;
-import com.wt.blockchain.asset.util.Constatns;
-import com.wt.blockchain.asset.util.NumberUtil;
+import com.wt.blockchainivest.repository.dao.CoinDetailDao;
+import com.wt.blockchainivest.domain.util.CommonUtil;
+import com.wt.blockchainivest.domain.util.Constatns;
+import com.wt.blockchainivest.domain.util.NumberUtil;
+import com.wt.blockchainivest.repository.dto.CoinDetailDto;
+import org.springframework.stereotype.Component;
 
 public class HistoryWindow extends BaseWindow {
 
@@ -116,7 +117,7 @@ public class HistoryWindow extends BaseWindow {
 
 	private void showHistory() {
 		// 获取明细和汇总数据
-		List<CoinDetail> detailList = coinDetailDao.query(this.coinName);
+		List<CoinDetailDto> detailList = coinDetailDao.query(this.coinName);
 
 		List<String> printInfo = new ArrayList<>();
 
@@ -128,7 +129,7 @@ public class HistoryWindow extends BaseWindow {
 		for (int i = 0; i < detailList.size(); i++) {
 
 			StringBuffer sb = new StringBuffer("");
-			CoinDetail detail = detailList.get(i);
+			CoinDetailDto detail = detailList.get(i);
 
 			sb.append("[" + CommonUtil.formateDate(detail.getCreate_Date()) + "]  ");
 

@@ -1,4 +1,6 @@
-package com.wt.blockchain.asset.dto;
+package com.wt.blockchainivest.repository.dto;
+
+import com.wt.blockchainivest.repository.dto.BaseDto;
 
 import java.util.Date;
 
@@ -7,7 +9,7 @@ import java.util.Date;
  * 
  * @author wangtao
  */
-public class CoinSummary extends BaseDto {
+public class CoinSummaryDto extends BaseDto {
 
 	private Integer id;
 	private String coin_name; 

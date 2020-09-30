@@ -13,15 +13,16 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
-import com.wt.blockchain.asset.dao.BackupDao;
-import com.wt.blockchain.asset.dao.CoinDetailDao;
-import com.wt.blockchain.asset.dao.ConstantsDao;
-import com.wt.blockchain.asset.dto.CoinDetail;
-import com.wt.blockchain.asset.dto.Constants;
-import com.wt.blockchain.asset.util.CommonUtil;
-import com.wt.blockchain.asset.util.Constatns;
-import com.wt.blockchain.asset.util.Constatns.ConstatnsKey;
-import com.wt.blockchain.asset.util.NumberUtil;
+import com.wt.blockchainivest.repository.dao.BackupDao;
+import com.wt.blockchainivest.repository.dao.CoinDetailDao;
+import com.wt.blockchainivest.repository.dao.ConstantsDao;
+import com.wt.blockchainivest.domain.util.CommonUtil;
+import com.wt.blockchainivest.domain.util.Constatns;
+import com.wt.blockchainivest.domain.util.Constatns.ConstatnsKey;
+import com.wt.blockchainivest.domain.util.NumberUtil;
+import com.wt.blockchainivest.repository.dto.CoinDetailDto;
+import com.wt.blockchainivest.repository.dto.ConstantsDto;
+import org.springframework.stereotype.Component;
 
 public class BackupWindow extends BaseWindow {
 
@@ -38,6 +39,7 @@ public class BackupWindow extends BaseWindow {
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				try {
 					new BackupWindow();
@@ -110,12 +112,12 @@ public class BackupWindow extends BaseWindow {
 	}
 
 	public void initDate() {
-		Constants maxid = constantsDao.queryByType(ConstatnsKey.MAX_DETAIL_ID).get(0);
+		ConstantsDto maxid = constantsDao.queryByType(ConstatnsKey.MAX_DETAIL_ID).get(0);
 
-		List<CoinDetail> detailList = coinDetailDao.queryById(Integer.valueOf(maxid.getValue()));
+		List<CoinDetailDto> detailList = coinDetailDao.queryById(Integer.valueOf(maxid.getValue()));
 
 		StringBuffer sb = new StringBuffer("");
-		for (CoinDetail detail : detailList) {
+		for (CoinDetailDto detail : detailList) {
 			sb.append("[" + CommonUtil.formateDate(detail.getCreate_Date()) + "]  ");
 			sb.append("币种：" + detail.getCoin_name());
 
