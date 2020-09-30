@@ -32,7 +32,6 @@ public class Application {
 
         BuySellStreamWindow window =
                 applicationContext.getBean(BuySellStreamWindow.class);
-        window.init();
-        window.setVisible(true);
+        window.initAndShow();
     }
 }

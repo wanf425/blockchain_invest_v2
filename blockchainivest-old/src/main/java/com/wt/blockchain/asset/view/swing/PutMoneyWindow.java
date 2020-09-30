@@ -14,26 +14,38 @@ import javax.swing.JTextField;
 
 import com.wt.blockchainivest.repository.dao.CoinDetailDao;
 import com.wt.blockchainivest.repository.dao.CoinSummaryDao;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/**
+ * 资金投入页面
+ *
+ * @author wangtao
+ */
+@Component
 public class PutMoneyWindow extends BaseWindow {
 
 	private static final long serialVersionUID = -9155959405640988640L;
+
+	@Autowired
+	private CoinDetailDao coinDetailDao;
+	@Autowired
+	private BuySellStreamWindow buySellStreamWindow;
+
 	private JFrame frame;
 	private JTextField putMoneyTF;
 	private JLabel putMoneyLA = new JLabel("投入金额（RMB）：");
-	private CoinDetailDao coinDetailDao = new CoinDetailDao();
-	private BuySellStreamWindow buySellStreamWindow;
-	private CoinSummaryDao coinSummaryDao;
-	
+
+
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				try {
-					new PutMoneyWindow(null);
+					new PutMoneyWindow();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -41,20 +53,8 @@ public class PutMoneyWindow extends BaseWindow {
 		});
 	}
 
-	/**
-	 * Create the application.
-	 */
-	public PutMoneyWindow(BuySellStreamWindow buySellStreamWindow) {
-		this.buySellStreamWindow = buySellStreamWindow;
+    public void initAndShow() {
 		initialize();
-		refresh();
-	}
-
-	public void show() {
-		refresh();
-	}
-
-	public void refresh() {
 		this.frame.setVisible(true);
 	}
 

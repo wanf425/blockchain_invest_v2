@@ -22,16 +22,27 @@ import com.wt.blockchainivest.domain.util.Constatns.ConstatnsKey;
 import com.wt.blockchainivest.domain.util.NumberUtil;
 import com.wt.blockchainivest.repository.dto.CoinDetailDto;
 import com.wt.blockchainivest.repository.dto.ConstantsDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/**
+ * 数据备份页面
+ *
+ * @author wangtao
+ */
+@Component
 public class BackupWindow extends BaseWindow {
+
+	@Autowired
+	private CoinDetailDao coinDetailDao;
+	@Autowired
+	private BackupDao backupDao;
+	@Autowired
+	private ConstantsDao constantsDao;
 
 	private JFrame frame;
 	private JButton backupBtn = new JButton("备份");
 	private JButton rollbackBtn = new JButton("回滚");
-	private ConstantsDao constantsDao = new ConstantsDao();
-	private CoinDetailDao coinDetailDao = new CoinDetailDao();
-	private BackupDao backupDao = new BackupDao();
 	private final JEditorPane detailLogPane = new JEditorPane();
 
 	/**
@@ -51,14 +62,10 @@ public class BackupWindow extends BaseWindow {
 		});
 	}
 
-	public BackupWindow() {
+	public void initAndShow() {
 		initialize();
-		show();
-	}
-
-	public void show() {
+		initDate();
 		this.frame.setVisible(true);
-		refresh();
 	}
 
 	public void refresh() {

@@ -24,6 +24,7 @@ import static com.wt.blockchainivest.domain.util.Constatns.getCost;
 import static com.wt.blockchainivest.domain.util.NumberUtil.add;
 import static com.wt.blockchainivest.domain.util.NumberUtil.sub;
 
+@Component
 public class CoinSummaryDao extends BaseDao<CoinSummaryDto> {
     CoinInfoDao coinInfoDao = new CoinInfoDao();
 

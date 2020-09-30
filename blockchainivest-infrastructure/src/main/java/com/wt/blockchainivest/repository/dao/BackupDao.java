@@ -6,9 +6,11 @@ import com.wt.blockchainivest.domain.util.LogUtil;
 import com.wt.blockchainivest.repository.dao.BaseDao;
 import com.wt.blockchainivest.repository.dto.CoinDetailDto;
 import com.xiaoleilu.hutool.db.Entity;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public class BackupDao extends BaseDao<CoinDetailDto> {
 
     /**

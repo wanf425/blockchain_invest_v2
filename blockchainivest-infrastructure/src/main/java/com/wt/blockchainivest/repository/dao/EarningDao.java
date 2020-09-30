@@ -9,11 +9,13 @@ import com.wt.blockchainivest.repository.dto.CoinSummaryDto;
 import com.wt.blockchainivest.repository.dto.EarningDto;
 import com.xiaoleilu.hutool.db.Entity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@Component
 public class EarningDao extends BaseDao<EarningDto> {
 
     @Autowired

@@ -1,7 +1,5 @@
 package com.wt.blockchainivest.repository.dto;
 
-import com.alibaba.cola.domain.Entity;
-import com.wt.blockchainivest.repository.dto.BaseDto;
 import lombok.Data;
 
 import java.util.Date;
@@ -12,7 +10,6 @@ import java.util.Date;
  * @author wangtao
  */
 @Data
-@Entity
 public class CoinDetailDto extends BaseDto {
 
     private Integer id;
@@ -23,7 +20,7 @@ public class CoinDetailDto extends BaseDto {
     private String total_cost_currency;
     // 手续费金额
     private Double service_charge;
-    // 手续费单位
+    //手续费单位
     private String servcieChargeCurrency;
     private String monetary_unit;
     private Double avarange_price;

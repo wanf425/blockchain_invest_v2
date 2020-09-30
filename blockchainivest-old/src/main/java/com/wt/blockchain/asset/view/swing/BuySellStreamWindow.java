@@ -29,399 +29,385 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 首页
+ *
+ * 展示交易汇总信息
+ *
+ * @author wangtao
+ */
 @Component
 public class BuySellStreamWindow extends BaseWindow {
-	private static final long serialVersionUID = 1L;
-	@Autowired
-	private CoinInfoGateway coinInfoRepository;
-	private CoinSummaryDao coinSummaryDao = new CoinSummaryDao();
-	private ConstantsDao constantsDao = new ConstantsDao();
-	private List<CoinSummaryDto> summaryList = null;
-	private JPanel contentPane;
-	private JTable table;
+    private static final long serialVersionUID = 1L;
+    @Autowired
+    private CoinInfoGateway coinInfoRepository;
+    @Autowired
+    private CoinSummaryDao coinSummaryDao;
+    @Autowired
+    private ConstantsDao constantsDao;
+    @Autowired
+    private CoinInfoWindow coinInfoWindow;
+    @Autowired
+    private BuySellRecordsWindow buySellRecordsWindow;
+    @Autowired
+    private PutMoneyWindow putMoneyWindow;
+    @Autowired
+    private HistoryWindow historyWindow;
+    @Autowired
+    private BackupWindow backupWindow;
+    @Autowired
+    private EarningWindow earningWindow;
 
-	private JLabel coinNameLA = new JLabel("币种：");
-	private JComboBox<ConstantsDto> coinNameCB = new JComboBox<ConstantsDto>();
-	private JButton queryBtn = new JButton("查询");
-	private JButton buySellBtn = new JButton("买卖操作");
-	private JButton assetBtn = new JButton("资产统计");
-	private JButton infoBtn = new JButton("信息录入");
-	private JButton putBtn = new JButton("资金投入");
-	private JLabel totalNumLA = new JLabel("资产统计");
-	private JButton backUpBtn = new JButton("数据备份");
+    private List<CoinSummaryDto> summaryList = null;
+    private JPanel contentPane;
+    private JTable table;
+    private JLabel coinNameLA = new JLabel("币种：");
+    private JComboBox<ConstantsDto> coinNameCB = new JComboBox<ConstantsDto>();
+    private JButton queryBtn = new JButton("查询");
+    private JButton buySellBtn = new JButton("买卖操作");
+    private JButton assetBtn = new JButton("资产统计");
+    private JButton infoBtn = new JButton("信息录入");
+    private JButton putBtn = new JButton("资金投入");
+    private JLabel totalNumLA = new JLabel("资产统计");
+    private JButton backUpBtn = new JButton("数据备份");
+    private String queryCoinName = "";
 
-	private CoinInfoWindow coinInfoWindow = null;
-	private BuySellRecordsWindow buySellRecordsWindow = null;
-	private PutMoneyWindow putMoneyWindow = null;
-	private HistoryWindow historyWindow = null;
-	private BackupWindow backupWindow = null;
-	private EarningWindow earningWindow = null;
+    /**
+     * Launch the application.
+     */
+    public static void main(String[] args) {
+        EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    BuySellStreamWindow frame = new BuySellStreamWindow();
+                    frame.initialize();
+                    frame.setVisible(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
 
-	private String queryCoinName = "";
+    public void initAndShow() {
+        initialize();
+        this.setVisible(true);
+    }
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					BuySellStreamWindow frame = new BuySellStreamWindow();
-					frame.init();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+    public void initialize() {
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setBounds(100, 100, 1024, 400);
+        contentPane = new JPanel();
+        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+        setContentPane(contentPane);
 
-	public void init() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1024, 400);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
+        // 表格
+        TableModel dataModel = getTableModel();
+        table = new JTable(dataModel);
+        // 添加排序
+        table.setRowSorter(new TableRowSorter<TableModel>(dataModel));
+        JScrollPane jsp = new JScrollPane(table);
+        // 右对齐
+        DefaultTableCellRenderer r = new DefaultTableCellRenderer();
+        r.setHorizontalAlignment(JLabel.RIGHT);
+        // 左对齐
+        DefaultTableCellRenderer l = new DefaultTableCellRenderer();
+        l.setHorizontalAlignment(JLabel.LEFT);
+        table.setDefaultRenderer(Object.class, r);
+        table.getColumnModel().getColumn(0).setCellRenderer(l);
+        // 列宽
+        table.getColumnModel().getColumn(0).setPreferredWidth(15);
 
-		// 表格
-		TableModel dataModel = getTableModel();
-		table = new JTable(dataModel);
-		// 添加排序
-		table.setRowSorter(new TableRowSorter<TableModel>(dataModel));
-		JScrollPane jsp = new JScrollPane(table);
-		// 右对齐
-		DefaultTableCellRenderer r = new DefaultTableCellRenderer();
-		r.setHorizontalAlignment(JLabel.RIGHT);
-		// 左对齐
-		DefaultTableCellRenderer l = new DefaultTableCellRenderer();
-		l.setHorizontalAlignment(JLabel.LEFT);
-		table.setDefaultRenderer(Object.class, r);
-		table.getColumnModel().getColumn(0).setCellRenderer(l);
-		// 列宽
-		table.getColumnModel().getColumn(0).setPreferredWidth(15);
+        GroupLayout gl_contentPane = new GroupLayout(contentPane);
+        gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING).addGroup(gl_contentPane
+                .createSequentialGroup().addContainerGap()
+                .addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+                        .addComponent(totalNumLA, GroupLayout.DEFAULT_SIZE, 1002, Short.MAX_VALUE)
+                        .addComponent(jsp, GroupLayout.DEFAULT_SIZE, 1002, Short.MAX_VALUE)
+                        .addGroup(gl_contentPane.createSequentialGroup().addComponent(coinNameLA)
+                                .addPreferredGap(ComponentPlacement.RELATED)
+                                .addComponent(coinNameCB, GroupLayout.PREFERRED_SIZE, 104, GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(ComponentPlacement.RELATED)
+                                .addComponent(queryBtn, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(ComponentPlacement.RELATED).addComponent(buySellBtn)
+                                .addPreferredGap(ComponentPlacement.RELATED)
+                                .addComponent(putBtn, GroupLayout.PREFERRED_SIZE, 96, GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(ComponentPlacement.RELATED).addComponent(infoBtn)
+                                .addPreferredGap(ComponentPlacement.RELATED).addComponent(backUpBtn)
+                                .addPreferredGap(ComponentPlacement.RELATED)
+                                .addComponent(assetBtn, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap()));
+        gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING).addGroup(gl_contentPane
+                .createSequentialGroup().addGap(14)
+                .addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+                        .addComponent(coinNameCB, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+                                GroupLayout.PREFERRED_SIZE)
+                        .addComponent(queryBtn, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(buySellBtn, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(coinNameLA).addComponent(putBtn).addComponent(infoBtn)
+                        .addComponent(assetBtn, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(backUpBtn))
+                .addPreferredGap(ComponentPlacement.RELATED)
+                .addComponent(jsp, GroupLayout.PREFERRED_SIZE, 199, GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(ComponentPlacement.UNRELATED).addComponent(totalNumLA).addGap(92)));
+        contentPane.setLayout(gl_contentPane);
 
-		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING).addGroup(gl_contentPane
-				.createSequentialGroup().addContainerGap()
-				.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(totalNumLA, GroupLayout.DEFAULT_SIZE, 1002, Short.MAX_VALUE)
-						.addComponent(jsp, GroupLayout.DEFAULT_SIZE, 1002, Short.MAX_VALUE)
-						.addGroup(gl_contentPane.createSequentialGroup().addComponent(coinNameLA)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(coinNameCB, GroupLayout.PREFERRED_SIZE, 104, GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(queryBtn, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED).addComponent(buySellBtn)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(putBtn, GroupLayout.PREFERRED_SIZE, 96, GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED).addComponent(infoBtn)
-								.addPreferredGap(ComponentPlacement.RELATED).addComponent(backUpBtn)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(assetBtn, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)))
-				.addContainerGap()));
-		gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING).addGroup(gl_contentPane
-				.createSequentialGroup().addGap(14)
-				.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(coinNameCB, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(queryBtn, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(buySellBtn, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(coinNameLA).addComponent(putBtn).addComponent(infoBtn)
-						.addComponent(assetBtn, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(backUpBtn))
-				.addPreferredGap(ComponentPlacement.RELATED)
-				.addComponent(jsp, GroupLayout.PREFERRED_SIZE, 199, GroupLayout.PREFERRED_SIZE)
-				.addPreferredGap(ComponentPlacement.UNRELATED).addComponent(totalNumLA).addGap(92)));
-		contentPane.setLayout(gl_contentPane);
+        initDate();
+        addListener();
+    }
 
-		initDate();
-		addListener();
-	}
+    public AbstractTableModel getTableModel() {
+        return new AbstractTableModel() {
+            private static final long serialVersionUID = 4354562018087682852L;
+            String[] names = {"币种", "总数量", "总花费(USD)", "购买均价(USD)", "当前市价(USD)", "收益率(%)", "收益数(USD)", "资产占比(%)",
+                    "预分配比例(%)"};
 
-	/**
-	 * Create the frame.
-	 */
-	public BuySellStreamWindow() {
+            @Override
+            public Class getColumnClass(int column) {
+                Class returnValue;
+                if ((column >= 0) && (column < getColumnCount())) {
+                    returnValue = getValueAt(0, column).getClass();
+                } else {
+                    returnValue = Object.class;
+                }
+                return returnValue;
+            }
 
-	}
+            @Override
+            public int getColumnCount() {
+                return names.length;
+            }
 
-	public AbstractTableModel getTableModel() {
-		return new AbstractTableModel() {
-			String[] names = { "币种", "总数量", "总花费(USD)", "购买均价(USD)", "当前市价(USD)", "收益率(%)", "收益数(USD)", "资产占比(%)",
-					"预分配比例(%)" };
+            @Override
+            public int getRowCount() {
+                return getData().size();
+            }
 
-			private static final long serialVersionUID = 4354562018087682852L;
+            @Override
+            public String getColumnName(int column) {
+                return names[column];
+            }
 
-			@Override
-			public Class getColumnClass(int column) {
-				Class returnValue;
-				if ((column >= 0) && (column < getColumnCount())) {
-					returnValue = getValueAt(0, column).getClass();
-				} else {
-					returnValue = Object.class;
-				}
-				return returnValue;
-			}
+            @Override
+            public Object getValueAt(int row, int col) {
+                switch (col) {
+                    case (0): {
+                        return getData().get(row).getCoin_name();
+                    }
+                    case (1): {
+                        return NumberUtil.formateNum(getData().get(row).getCoin_num(), "#.########");
+                    }
+                    case (2): {
+                        return getData().get(row).getTotal_cost();
+                    }
+                    case (3): {
+                        return getData().get(row).getAvarange_price();
+                    }
+                    case (4): {
+                        return getData().get(row).getMarket_price();
+                    }
+                    case (5): {
+                        return getData().get(row).getRate_percent();
+                    }
+                    case (6): {
+                        return getData().get(row).getRate_num();
+                    }
+                    case (7): {
+                        return getData().get(row).getAsset_percent();
+                    }
+                    case (8): {
+                        return getData().get(row).getPre_percent();
+                    }
+                    default:
+                        return "";
+                }
+            }
+        };
+    }
 
-			@Override
-			public int getColumnCount() {
-				return names.length;
-			}
+    public List<CoinSummaryDto> getData() {
+        if (summaryList == null) {
+            summaryList = querySummary();
+        }
 
-			@Override
-			public int getRowCount() {
-				return getData().size();
-			}
+        return summaryList;
+    }
 
-			@Override
-			public String getColumnName(int column) {
-				return names[column];
-			}
+    /**
+     * 初始化数据
+     */
+    private void initDate() {
+        // 币种 下拉框
+        List<ConstantsDto> coinNames =
+                constantsDao.queryByType(ConstatnsKey.COIN_NAME);
+        coinNames.add(0, new ConstantsDto("", "全部"));
+        CommonUtil.initialComboBox(coinNames, coinNameCB, c -> c.getValue());
+    }
 
-			@Override
-			public Object getValueAt(int row, int col) {
-				switch (col) {
-				case (0): {
-					return getData().get(row).getCoin_name();
-				}
-				case (1): {
-					return NumberUtil.formateNum(getData().get(row).getCoin_num(), "#.########");
-				}
-				case (2): {
-					return getData().get(row).getTotal_cost();
-				}
-				case (3): {
-					return getData().get(row).getAvarange_price();
-				}
-				case (4): {
-					return getData().get(row).getMarket_price();
-				}
-				case (5): {
-					return getData().get(row).getRate_percent();
-				}
-				case (6): {
-					return getData().get(row).getRate_num();
-				}
-				case (7): {
-					return getData().get(row).getAsset_percent();
-				}
-				case (8): {
-					return getData().get(row).getPre_percent();
-				}
-				default:
-					return "";
-				}
-			}
-		};
-	}
+    private List<CoinSummaryDto> querySummary() {
+        List<CoinSummaryDto> list = coinSummaryDao.querySummary(queryCoinName);
+        List<CoinSummaryDto> result = new ArrayList<CoinSummaryDto>();
 
-	public List<CoinSummaryDto> getData() {
-		if (summaryList == null) {
-			summaryList = querySummary();
-		}
+        Double totalNum = 0.0;
+        Double coinNum = 0.0;
+        Double cash = 0.0;
+        Double usdtNum = 0.0;
 
-		return summaryList;
-	}
-
-	/**
-	 * 初始化数据
-	 */
-	private void initDate() {
-		// 币种 下拉框
-		List<ConstantsDto> coinNames =
-				constantsDao.queryByType(ConstatnsKey.COIN_NAME);
-		coinNames.add(0, new ConstantsDto("", "全部"));
-		CommonUtil.initialComboBox(coinNames, coinNameCB, c -> c.getValue());
-	}
-
-	private List<CoinSummaryDto> querySummary() {
-		List<CoinSummaryDto> list = coinSummaryDao.querySummary(queryCoinName);
-		List<CoinSummaryDto> result = new ArrayList<CoinSummaryDto>();
-
-		Double totalNum = 0.0;
-		Double coinNum = 0.0;
-		Double cash = 0.0;
-		Double usdtNum = 0.0;
-
-		for (CoinSummaryDto cs : list) {
+        for (CoinSummaryDto cs : list) {
 //			if (cs.getCoin_num() == 0 && !Currency.RMB.equals(cs.getCoin_name())
 //					&& !Currency.USDT.equals(cs.getCoin_name())) {
 //				continue;
 //			}
-			
-			result.add(cs);
-			if (Constatns.Currency.RMB.equals(cs.getCoin_name())) {
-				cash = cs.getCoin_num() * cs.getMarket_price();
-				totalNum += cash;
-			} else if (Constatns.Currency.USDT.equals(cs.getCoin_name())) {
-				usdtNum = cs.getCoin_num();
-				totalNum += usdtNum;
-			} else {
-				totalNum += cs.getCoin_num() * cs.getMarket_price();
-				coinNum += cs.getCoin_num() * cs.getMarket_price();
-			}
-		}
 
-		Double rate = coinInfoRepository.getExchangeRate();
+            result.add(cs);
+            if (Constatns.Currency.RMB.equals(cs.getCoin_name())) {
+                cash = cs.getCoin_num() * cs.getMarket_price();
+                totalNum += cash;
+            } else if (Constatns.Currency.USDT.equals(cs.getCoin_name())) {
+                usdtNum = cs.getCoin_num();
+                totalNum += usdtNum;
+            } else {
+                totalNum += cs.getCoin_num() * cs.getMarket_price();
+                coinNum += cs.getCoin_num() * cs.getMarket_price();
+            }
+        }
 
-		StringBuffer sb = new StringBuffer("");
-		sb.append("总资产：").append(NumberUtil.formateNum(totalNum)).append("（")
-				.append(NumberUtil.formateNum(totalNum / rate)).append("）");
-		sb.append("  代币现值：").append(NumberUtil.formateNum(coinNum)).append("（")
-				.append(NumberUtil.formateNum(coinNum / rate)).append("）");
-		sb.append("  USDT现值：").append(NumberUtil.formateNum(usdtNum)).append("（")
-				.append(NumberUtil.formateNum(usdtNum / rate)).append("）");
-		sb.append("  现金：").append(NumberUtil.formateNum(cash)).append("（").append(NumberUtil.formateNum(cash / rate))
-				.append("）");
+        Double rate = coinInfoRepository.getExchangeRate();
 
-		totalNumLA.setText(sb.toString());
+        StringBuffer sb = new StringBuffer("");
+        sb.append("总资产：").append(NumberUtil.formateNum(totalNum)).append("（")
+                .append(NumberUtil.formateNum(totalNum / rate)).append("）");
+        sb.append("  代币现值：").append(NumberUtil.formateNum(coinNum)).append("（")
+                .append(NumberUtil.formateNum(coinNum / rate)).append("）");
+        sb.append("  USDT现值：").append(NumberUtil.formateNum(usdtNum)).append("（")
+                .append(NumberUtil.formateNum(usdtNum / rate)).append("）");
+        sb.append("  现金：").append(NumberUtil.formateNum(cash)).append("（").append(NumberUtil.formateNum(cash / rate))
+                .append("）");
 
-		return result;
-	}
+        totalNumLA.setText(sb.toString());
 
-	public void doQuery() {
-		summaryList = querySummary();
-		table.updateUI();
-	}
+        return result;
+    }
 
-	/**
-	 * 添加监听
-	 */
-	private void addListener() {
-		BuySellStreamWindow window = this;
+    public void doQuery() {
+        summaryList = querySummary();
+        table.updateUI();
+    }
 
-		// 查询按钮
-		queryBtn.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				queryCoinName = ((ConstantsDto) coinNameCB.getSelectedItem()).getKey();
-				doQuery();
-			}
-		});
+    /**
+     * 添加监听
+     */
+    private void addListener() {
+        BuySellStreamWindow window = this;
 
-		// 买卖操作按钮
-		buySellBtn.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				EventQueue.invokeLater(new Runnable() {
-					@Override
-					public void run() {
-						try {
-							if (buySellRecordsWindow == null) {
-								buySellRecordsWindow = new BuySellRecordsWindow(window);
-							} else {
-								buySellRecordsWindow.show();
-							}
-						} catch (Exception e) {
-							LogUtil.print("open buysell err", e);
-						}
-					}
-				});
-			}
-		});
+        // 查询按钮
+        queryBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                queryCoinName = ((ConstantsDto) coinNameCB.getSelectedItem()).getKey();
+                doQuery();
+            }
+        });
 
-		putBtn.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				EventQueue.invokeLater(new Runnable() {
-					@Override
-					public void run() {
-						try {
-							if (putMoneyWindow == null) {
-								putMoneyWindow = new PutMoneyWindow(window);
-							} else {
-								putMoneyWindow.show();
-							}
-						} catch (Exception e) {
-							LogUtil.print("open buysell err", e);
-						}
-					}
-				});
-			}
-		});
+        // 买卖操作按钮
+        buySellBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                EventQueue.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            buySellRecordsWindow.initAndShow();
+                        } catch (Exception e) {
+                            LogUtil.print("open buysell err", e);
+                        }
+                    }
+                });
+            }
+        });
 
-		// 信息录入
-		infoBtn.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				EventQueue.invokeLater(new Runnable() {
-					@Override
-					public void run() {
-						try {
-							if (coinInfoWindow == null) {
-								coinInfoWindow = new CoinInfoWindow(window);
-							} else {
-								coinInfoWindow.show();
-							}
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-					}
-				});
-			}
-		});
+        putBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                EventQueue.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            putMoneyWindow.initAndShow();
+                        } catch (Exception e) {
+                            LogUtil.print("open buysell err", e);
+                        }
+                    }
+                });
+            }
+        });
 
-		// 备份
-		backUpBtn.addActionListener(t -> EventQueue.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					if (backupWindow == null) {
-						backupWindow = new BackupWindow();
-					} else {
-						backupWindow.show();
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}));
+        // 信息录入
+        infoBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                EventQueue.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            coinInfoWindow.initAndShow();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+        });
 
-		// 资产统计 TODO
-		assetBtn.addActionListener(t -> EventQueue.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					if (earningWindow == null) {
-						earningWindow = new EarningWindow();
-					} else {
-						earningWindow.show();
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}));
+        // 备份
+        backUpBtn.addActionListener(t -> EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    backupWindow.initAndShow();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }));
 
-		// 列表双击
-		table.addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent e) {
-				if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2) {// 单击鼠标左键
+        // 资产统计 TODO
+        assetBtn.addActionListener(t -> EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    earningWindow.initAndShow();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }));
 
-					String coinName = summaryList.get(getSelectedRowIndex()).getCoin_name();
+        // 列表双击
+        table.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2) {// 单击鼠标左键
 
-					EventQueue.invokeLater(new Runnable() {
-						@Override
-						public void run() {
-							try {
-								if (historyWindow == null) {
-									historyWindow = new HistoryWindow(coinName);
-								} else {
-									historyWindow.show(coinName);
-								}
-							} catch (Exception e) {
-								e.printStackTrace();
-							}
-						}
-					});
+                    String coinName = summaryList.get(getSelectedRowIndex()).getCoin_name();
 
-				}
-			}
-		});
-	}
+                    EventQueue.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                historyWindow.initAndShow(coinName);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
 
-	private int getSelectedRowIndex() {
-		return table.convertRowIndexToModel(table.getSelectedRow());
-	}
+                }
+            }
+        });
+    }
+
+    private int getSelectedRowIndex() {
+        return table.convertRowIndexToModel(table.getSelectedRow());
+    }
 }

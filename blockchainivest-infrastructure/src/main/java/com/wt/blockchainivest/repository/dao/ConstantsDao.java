@@ -3,11 +3,13 @@ package com.wt.blockchainivest.repository.dao;
 import com.wt.blockchainivest.domain.util.LogUtil;
 import com.wt.blockchainivest.repository.dto.ConstantsDto;
 import com.xiaoleilu.hutool.db.Entity;
+import org.springframework.stereotype.Component;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class ConstantsDao extends BaseDao<ConstantsDto> {
 
     public static void main(String[] args) {

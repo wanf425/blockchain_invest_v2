@@ -1,11 +1,6 @@
 package com.wt.blockchain.asset.view.swing;
 
 import com.mysql.cj.util.StringUtils;
-import com.wt.blockchainivest.repository.dao.CoinDetailDao;
-import com.wt.blockchainivest.repository.dao.CoinSummaryDao;
-import com.wt.blockchainivest.repository.dao.ConstantsDao;
-import com.wt.blockchainivest.repository.dto.CoinSummaryDto;
-import com.wt.blockchainivest.repository.dto.ConstantsDto;
 import com.wt.blockchainivest.domain.util.CommonUtil;
 import com.wt.blockchainivest.domain.util.Constatns.ConstatnsKey;
 import com.wt.blockchainivest.domain.util.Constatns.Currency;
@@ -13,8 +8,14 @@ import com.wt.blockchainivest.domain.util.Constatns.Market;
 import com.wt.blockchainivest.domain.util.Constatns.OpType;
 import com.wt.blockchainivest.domain.util.LogUtil;
 import com.wt.blockchainivest.domain.util.NumberUtil;
+import com.wt.blockchainivest.repository.dao.CoinDetailDao;
+import com.wt.blockchainivest.repository.dao.CoinSummaryDao;
+import com.wt.blockchainivest.repository.dao.ConstantsDao;
 import com.wt.blockchainivest.repository.dto.CoinDetailDto;
+import com.wt.blockchainivest.repository.dto.CoinSummaryDto;
+import com.wt.blockchainivest.repository.dto.ConstantsDto;
 import net.miginfocom.swing.MigLayout;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
@@ -33,12 +34,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 买卖操作页面
+ *
+ * @author wangtao
+ */
+@Component
 public class BuySellRecordsWindow extends BaseWindow {
 
     private static final long serialVersionUID = 3375446484591175070L;
-    private ConstantsDao constantsDao = new ConstantsDao();
-    private CoinDetailDao coinDetailDao = new CoinDetailDao();
-    private CoinSummaryDao coinSummaryDao = new CoinSummaryDao();
+    @Autowired
+    private ConstantsDao constantsDao;
+    @Autowired
+    private CoinDetailDao coinDetailDao;
+    @Autowired
+    private CoinSummaryDao coinSummaryDao;
+    @Autowired
+    private BuySellStreamWindow buySellStreamWindow;
+
     private DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private Map<String, CoinSummaryDto> summaryMap = new HashMap<>();
 
@@ -67,17 +80,6 @@ public class BuySellRecordsWindow extends BaseWindow {
     private JLabel accountNumLA;
     private JLabel accountNum;
     private JComboBox<ConstantsDto> serviceChargeCB; // 手续费单位
-    private BuySellStreamWindow buySellStreamWindow;
-
-    /**
-     * Create the application.
-     */
-    public BuySellRecordsWindow(BuySellStreamWindow buySellStreamWindow) {
-        this.buySellStreamWindow = buySellStreamWindow;
-        initialize();
-        refresh();
-
-    }
 
     /**
      * Launch the application.
@@ -89,8 +91,7 @@ public class BuySellRecordsWindow extends BaseWindow {
             @Override
             public void run() {
                 try {
-                    new BuySellRecordsWindow(null);
-
+                    new BuySellRecordsWindow();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -98,7 +99,8 @@ public class BuySellRecordsWindow extends BaseWindow {
         });
     }
 
-    public void show() {
+    public void initAndShow() {
+        initialize();
         refresh();
     }
 

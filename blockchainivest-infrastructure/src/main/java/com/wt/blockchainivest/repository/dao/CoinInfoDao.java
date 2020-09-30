@@ -4,6 +4,7 @@ import com.wt.blockchainivest.domain.util.Constatns;
 import com.wt.blockchainivest.domain.util.LogUtil;
 import com.wt.blockchainivest.repository.dto.CoinInfoDto;
 import com.xiaoleilu.hutool.db.Entity;
+import org.springframework.stereotype.Component;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Component
 public class CoinInfoDao extends BaseDao<CoinInfoDto> {
 
     public List<CoinInfoDto> queryCoinInfo(String coinName) {

@@ -7,6 +7,7 @@ import com.wt.blockchainivest.repository.dto.CoinSummaryDto;
 import com.xiaoleilu.hutool.db.Entity;
 import com.wt.blockchainivest.domain.util.Constatns;
 import com.wt.blockchainivest.domain.util.LogUtil;
+import org.springframework.stereotype.Component;
 
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@Component
 public class CoinDetailDao extends BaseDao<CoinDetailDto> {
     CoinInfoDao coinInfoDao = new CoinInfoDao();
     CoinSummaryDao coinSummaryDao = new CoinSummaryDao();

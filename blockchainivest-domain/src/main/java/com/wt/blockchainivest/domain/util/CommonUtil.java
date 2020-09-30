@@ -1,7 +1,6 @@
 package com.wt.blockchainivest.domain.util;
 
 import com.wt.blockchainivest.domain.gateway.CoinInfoGateway;
-import com.wt.blockchainivest.domain.trasaction.CoinInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.swing.*;

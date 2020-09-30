@@ -18,23 +18,33 @@ import javax.swing.table.TableRowSorter;
 import com.wt.blockchainivest.repository.dao.EarningDao;
 import com.wt.blockchainivest.repository.dto.EarningDto;
 import com.wt.blockchainivest.domain.util.NumberUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/**
+ * 资产统计页面
+ *
+ * @author wangtao
+ */
+@Component
 public class EarningWindow extends BaseWindow {
 
 	private static final long serialVersionUID = 4451854259633603697L;
+
+	@Autowired
+	private EarningDao earningDao;
+
 	private JFrame frame;
 	private JTable table;
 	private List<EarningDto> earningList = null;
 	private JButton button = new JButton("结算");
-
-	private EarningDao earningDao = new EarningDao();
 
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				try {
 					new EarningWindow();
@@ -45,15 +55,8 @@ public class EarningWindow extends BaseWindow {
 		});
 	}
 
-	/**
-	 * Create the application.
-	 */
-	public EarningWindow() {
+	public void initAndShow() {
 		initialize();
-		refresh();
-	}
-
-	public void show() {
 		refresh();
 	}
 
@@ -116,6 +119,7 @@ public class EarningWindow extends BaseWindow {
 
 			private static final long serialVersionUID = 4354562018087682852L;
 
+			@Override
 			@SuppressWarnings("rawtypes")
 			public Class getColumnClass(int column) {
 				Class returnValue;
@@ -127,18 +131,19 @@ public class EarningWindow extends BaseWindow {
 				return returnValue;
 			}
 
+			@Override
 			public int getColumnCount() {
 				return names.length;
 			}
-
+			@Override
 			public int getRowCount() {
 				return getData().size();
 			}
-
+			@Override
 			public String getColumnName(int column) {
 				return names[column];
 			}
-
+			@Override
 			public Object getValueAt(int row, int col) {
 				switch (col) {
 				case (0): {

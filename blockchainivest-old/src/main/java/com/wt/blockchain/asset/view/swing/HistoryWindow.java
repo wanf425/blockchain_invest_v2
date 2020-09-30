@@ -22,11 +22,24 @@ import com.wt.blockchainivest.domain.util.CommonUtil;
 import com.wt.blockchainivest.domain.util.Constatns;
 import com.wt.blockchainivest.domain.util.NumberUtil;
 import com.wt.blockchainivest.repository.dto.CoinDetailDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/**
+ * 历史明细页面
+ *
+ * @author wangtao
+ */
+@Component
 public class HistoryWindow extends BaseWindow {
 
 	private static final long serialVersionUID = 2608099712684138825L;
+
+	@Autowired
+	private RefundWindow refundWindow;
+	@Autowired
+	private CoinDetailDao coinDetailDao;
+
 	private JFrame frame;
 	private JLabel coinNameLA = new JLabel("代币：");
 	private JLabel coinNameLA2 = new JLabel("coinName");
@@ -36,8 +49,6 @@ public class HistoryWindow extends BaseWindow {
 	private JScrollPane jsp = new JScrollPane(historyTF);
 	private String coinName;
 	private JButton refundBtn = new JButton("补差额");
-	private RefundWindow refundWindow = null;
-	private CoinDetailDao coinDetailDao = new CoinDetailDao();
 
 	// 拼装历史数据
 	private String split = "  ";
@@ -48,9 +59,10 @@ public class HistoryWindow extends BaseWindow {
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				try {
-					new HistoryWindow("BCH");
+					new HistoryWindow();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -66,7 +78,7 @@ public class HistoryWindow extends BaseWindow {
 	/**
 	 * Create the application.
 	 */
-	public HistoryWindow(String coinName) {
+	public void initAndShow(String coinName) {
 		initialize(coinName);
 		this.frame.setVisible(true);
 	}
@@ -241,11 +253,7 @@ public class HistoryWindow extends BaseWindow {
 				EventQueue.invokeLater(new Runnable() {
 					public void run() {
 						try {
-							if (refundWindow == null) {
-								refundWindow = new RefundWindow();
-							} else {
-								refundWindow.show();
-							}
+							refundWindow.initAndShow();
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
