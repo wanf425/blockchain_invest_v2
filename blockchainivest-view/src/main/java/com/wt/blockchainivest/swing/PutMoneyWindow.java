@@ -1,4 +1,4 @@
-package com.wt.blockchain.asset.view.swing;
+package com.wt.blockchainivest.swing;
 
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
@@ -13,7 +13,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import com.wt.blockchainivest.repository.dao.CoinDetailDao;
-import com.wt.blockchainivest.repository.dao.CoinSummaryDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

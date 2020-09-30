@@ -1,10 +1,7 @@
 package com.wt.blockchainivest;
 
-import com.wt.blockchain.asset.view.swing.BuySellStreamWindow;
-import com.wt.blockchainivest.domain.gateway.CoinInfoGateway;
-import com.wt.blockchainivest.repository.CoinInfoRepository;
+import com.wt.blockchainivest.swing.BuySellStreamWindow;
 import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationContext;
@@ -17,7 +14,7 @@ import org.springframework.context.ApplicationContext;
  * @author Frank Zhang
  */
 @SpringBootApplication(scanBasePackages = {"com.wt.blockchainivest", "com" +
-        ".alibaba.cola","com.wt.blockchain.asset","com.wt.blockchainivest.repository.dao"})
+        ".alibaba.cola"})
 @MapperScan("com.wt.blockchainivest.repository")
 public class Application {
 

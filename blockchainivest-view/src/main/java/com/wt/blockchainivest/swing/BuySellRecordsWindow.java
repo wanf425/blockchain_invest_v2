@@ -1,4 +1,4 @@
-package com.wt.blockchain.asset.view.swing;
+package com.wt.blockchainivest.swing;
 
 import com.mysql.cj.util.StringUtils;
 import com.wt.blockchainivest.domain.util.CommonUtil;

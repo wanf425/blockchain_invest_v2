@@ -1,4 +1,4 @@
-package com.wt.blockchain.asset.view.swing;
+package com.wt.blockchainivest.swing;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;

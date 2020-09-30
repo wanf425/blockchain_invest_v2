@@ -154,6 +154,6 @@
     <module>blockchainivest-domain</module>
     <module>blockchainivest-infrastructure</module>
     <module>start</module>
-    <module>blockchainivest-old</module>
+    <module>blockchainivest-view</module>
 </modules>
 </project>

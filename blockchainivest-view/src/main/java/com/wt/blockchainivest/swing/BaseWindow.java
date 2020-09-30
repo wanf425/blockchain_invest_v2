@@ -1,4 +1,4 @@
-package com.wt.blockchain.asset.view.swing;
+package com.wt.blockchainivest.swing;
 
 import org.springframework.stereotype.Component;
 
