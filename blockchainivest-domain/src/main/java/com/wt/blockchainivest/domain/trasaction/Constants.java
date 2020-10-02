@@ -10,11 +10,12 @@ public class Constants extends EntityObject {
     private String type;
     private String key;
     private String value;
+
     public Constants() {
 
     }
     public Constants(String key, String value) {
-        setKey(key);
-        setValue(value);
+        this.key = key;
+        this.value = value;
     }
 }

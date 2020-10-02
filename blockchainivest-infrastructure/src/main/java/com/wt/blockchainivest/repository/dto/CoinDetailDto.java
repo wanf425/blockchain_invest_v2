@@ -3,6 +3,8 @@ package com.wt.blockchainivest.repository.dto;
 import com.wt.blockchainivest.domain.trasaction.CoinDetail;
 import lombok.Data;
 
+import java.util.Date;
+
 /**
  * 交易明细
  *
@@ -10,5 +12,6 @@ import lombok.Data;
  */
 @Data
 public class CoinDetailDto extends CoinDetail implements BaseDto {
+
 
 }

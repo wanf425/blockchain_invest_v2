@@ -6,12 +6,18 @@ import lombok.Data;
 @Data
 public class ConstantsDto extends Constants implements BaseDto {
 
-	public ConstantsDto() {
+    private int id;
+    private String type;
+    private String key;
+    private String value;
 
-	}
+    public ConstantsDto() {
 
-	public ConstantsDto(String key, String value) {
-		setKey(key);
-		setValue(value);
-	}
+    }
+    public ConstantsDto(String key, String value) {
+        this.key = key;
+        this.value = value;
+    }
+
+
 }
