@@ -62,7 +62,8 @@ public class BackupWindow extends BaseWindow {
 		});
 	}
 
-	public void initAndShow() {
+	@Override
+    public void initAndShow(Object... args) {
 		initialize();
 		initDate();
 		this.frame.setVisible(true);

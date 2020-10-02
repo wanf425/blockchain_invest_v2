@@ -5,7 +5,6 @@ import com.wt.blockchainivest.repository.dto.BaseDto;
 import com.xiaoleilu.hutool.db.Session;
 import com.xiaoleilu.hutool.db.SqlRunner;
 import com.xiaoleilu.hutool.db.ds.DSFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.sql.DataSource;
 

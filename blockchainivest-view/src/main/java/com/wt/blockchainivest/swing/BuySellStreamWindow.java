@@ -72,25 +72,8 @@ public class BuySellStreamWindow extends BaseWindow {
     private JButton backUpBtn = new JButton("数据备份");
     private String queryCoinName = "";
 
-    /**
-     * Launch the application.
-     */
-    public static void main(String[] args) {
-        EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    BuySellStreamWindow frame = new BuySellStreamWindow();
-                    frame.initialize();
-                    frame.setVisible(true);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-
-    public void initAndShow() {
+    @Override
+    public void initAndShow(Object... args) {
         initialize();
         this.setVisible(true);
     }

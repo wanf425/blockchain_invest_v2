@@ -3,7 +3,6 @@ package com.wt.blockchainivest.repository.dao;
 import com.wt.blockchainivest.domain.util.Constatns.ConstatnsKey;
 import com.wt.blockchainivest.domain.util.Constatns.MaxDetailID;
 import com.wt.blockchainivest.domain.util.LogUtil;
-import com.wt.blockchainivest.repository.dao.BaseDao;
 import com.wt.blockchainivest.repository.dto.CoinDetailDto;
 import com.xiaoleilu.hutool.db.Entity;
 import org.springframework.stereotype.Component;

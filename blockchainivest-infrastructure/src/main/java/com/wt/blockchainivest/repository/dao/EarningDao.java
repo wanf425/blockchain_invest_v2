@@ -1,7 +1,6 @@
 package com.wt.blockchainivest.repository.dao;
 
 import com.wt.blockchainivest.domain.gateway.CoinInfoGateway;
-import com.wt.blockchainivest.domain.util.CommonUtil;
 import com.wt.blockchainivest.domain.util.Constatns;
 import com.wt.blockchainivest.domain.util.LogUtil;
 import com.wt.blockchainivest.domain.util.NumberUtil;

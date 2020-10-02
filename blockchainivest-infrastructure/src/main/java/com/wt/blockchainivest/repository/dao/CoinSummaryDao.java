@@ -11,8 +11,6 @@ import com.wt.blockchainivest.repository.dto.CoinSummaryDto;
 import com.xiaoleilu.hutool.bean.BeanUtil;
 import com.xiaoleilu.hutool.db.Entity;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.ArrayList;

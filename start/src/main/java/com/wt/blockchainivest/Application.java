@@ -1,5 +1,7 @@
 package com.wt.blockchainivest;
 
+import com.wt.blockchainivest.swing.BackupWindow;
+import com.wt.blockchainivest.swing.BaseWindow;
 import com.wt.blockchainivest.swing.BuySellStreamWindow;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -19,16 +21,25 @@ import org.springframework.context.ApplicationContext;
 public class Application {
 
     public static void main(String[] args) {
+        run(args);
+//        run(args, BackupWindow.class);
+    }
 
-        // BuySellStreamWindow.init();
+    private static void run(String[] args) {
+        run(args, BuySellStreamWindow.class);
+    }
 
-        // SpringApplication.run(Application.class, args);
-
+    private static void run(String[] args, Class clazz) {
         SpringApplicationBuilder builder = new SpringApplicationBuilder(Application.class);
+
+        for (String s : args) {
+            System.out.println(s);
+        }
         ApplicationContext applicationContext = builder.headless(false).run(args);
 
-        BuySellStreamWindow window =
-                applicationContext.getBean(BuySellStreamWindow.class);
-        window.initAndShow();
+        BaseWindow window =
+                (BaseWindow) applicationContext.getBean(clazz);
+        window.initAndShow(args);
     }
+
 }

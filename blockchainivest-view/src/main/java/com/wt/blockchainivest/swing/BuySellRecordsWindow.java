@@ -99,7 +99,8 @@ public class BuySellRecordsWindow extends BaseWindow {
         });
     }
 
-    public void initAndShow() {
+    @Override
+    public void initAndShow(Object... args) {
         initialize();
         refresh();
     }

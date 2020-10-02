@@ -1,55 +1,17 @@
 package com.wt.blockchainivest.repository.dto;
 
-import com.wt.blockchainivest.repository.dto.BaseDto;
+import com.wt.blockchainivest.domain.trasaction.Constants;
+import lombok.Data;
 
-public class ConstantsDto extends BaseDto {
+@Data
+public class ConstantsDto extends Constants implements BaseDto {
 
 	public ConstantsDto() {
 
 	}
 
 	public ConstantsDto(String key, String value) {
-		this.key = key;
-		this.value = value;
-	}
-
-	private int id;
-
-	private String type;
-
-	private String key;
-
-	private String value;
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
-
-	public String getKey() {
-		return key;
-	}
-
-	public void setKey(String key) {
-		this.key = key;
-	}
-
-	public String getValue() {
-		return value;
-	}
-
-	public void setValue(String value) {
-		this.value = value;
+		setKey(key);
+		setValue(value);
 	}
 }
