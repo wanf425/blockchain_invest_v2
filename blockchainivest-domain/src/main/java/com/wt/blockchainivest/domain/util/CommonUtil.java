@@ -1,6 +1,6 @@
 package com.wt.blockchainivest.domain.util;
 
-import com.wt.blockchainivest.domain.gateway.CoinInfoGateway;
+import com.wt.blockchainivest.domain.gateway.CoinInfoGatewayI;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.swing.*;
@@ -12,7 +12,7 @@ import java.util.function.Function;
 public class CommonUtil {
 
     @Autowired
-    private CoinInfoGateway coinInfoRepository;
+    private CoinInfoGatewayI coinInfoRepository;
 
     private CommonUtil() {
 

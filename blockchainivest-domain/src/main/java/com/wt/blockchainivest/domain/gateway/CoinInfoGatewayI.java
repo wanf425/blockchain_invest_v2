@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * @author wangtao
  */
-public interface CoinInfoGateway {
+public interface CoinInfoGatewayI {
 
     List<CoinInfo> queryCoinInfo(String coinName);
 

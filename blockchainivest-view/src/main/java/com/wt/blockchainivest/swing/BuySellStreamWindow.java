@@ -1,6 +1,7 @@
 package com.wt.blockchainivest.swing;
 
-import com.wt.blockchainivest.domain.gateway.CoinInfoGateway;
+import com.wt.blockchainivest.api.BlockchainInvestApplicationI;
+import com.wt.blockchainivest.domain.gateway.CoinInfoGatewayI;
 import com.wt.blockchainivest.domain.util.CommonUtil;
 import com.wt.blockchainivest.domain.util.Constatns;
 import com.wt.blockchainivest.domain.util.Constatns.ConstatnsKey;
@@ -10,6 +11,8 @@ import com.wt.blockchainivest.repository.dao.CoinSummaryDao;
 import com.wt.blockchainivest.repository.dao.ConstantsDao;
 import com.wt.blockchainivest.repository.dto.CoinSummaryDto;
 import com.wt.blockchainivest.repository.dto.ConstantsDto;
+import com.wt.blockchainivest.vo.CoinSummaryVo;
+import com.wt.blockchainivest.vo.IndexPageVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -31,7 +34,7 @@ import java.util.List;
 
 /**
  * 首页
- *
+ * <p>
  * 展示交易汇总信息
  *
  * @author wangtao
@@ -40,9 +43,9 @@ import java.util.List;
 public class BuySellStreamWindow extends BaseWindow {
     private static final long serialVersionUID = 1L;
     @Autowired
-    private CoinInfoGateway coinInfoRepository;
+    private BlockchainInvestApplicationI blockchainInvestApplicationImpl;
     @Autowired
-    private CoinSummaryDao coinSummaryDao;
+    private CoinInfoGatewayI coinInfoRepository;
     @Autowired
     private ConstantsDao constantsDao;
     @Autowired
@@ -58,7 +61,7 @@ public class BuySellStreamWindow extends BaseWindow {
     @Autowired
     private EarningWindow earningWindow;
 
-    private List<CoinSummaryDto> summaryList = null;
+    private List<CoinSummaryVo> summaryList = null;
     private JPanel contentPane;
     private JTable table;
     private JLabel coinNameLA = new JLabel("币种：");
@@ -209,7 +212,7 @@ public class BuySellStreamWindow extends BaseWindow {
         };
     }
 
-    public List<CoinSummaryDto> getData() {
+    public List<CoinSummaryVo> getData() {
         if (summaryList == null) {
             summaryList = querySummary();
         }
@@ -228,49 +231,25 @@ public class BuySellStreamWindow extends BaseWindow {
         CommonUtil.initialComboBox(coinNames, coinNameCB, c -> c.getValue());
     }
 
-    private List<CoinSummaryDto> querySummary() {
-        List<CoinSummaryDto> list = coinSummaryDao.querySummary(queryCoinName);
-        List<CoinSummaryDto> result = new ArrayList<CoinSummaryDto>();
-
-        Double totalNum = 0.0;
-        Double coinNum = 0.0;
-        Double cash = 0.0;
-        Double usdtNum = 0.0;
-
-        for (CoinSummaryDto cs : list) {
-//			if (cs.getCoin_num() == 0 && !Currency.RMB.equals(cs.getCoin_name())
-//					&& !Currency.USDT.equals(cs.getCoin_name())) {
-//				continue;
-//			}
-
-            result.add(cs);
-            if (Constatns.Currency.RMB.equals(cs.getCoin_name())) {
-                cash = cs.getCoin_num() * cs.getMarket_price();
-                totalNum += cash;
-            } else if (Constatns.Currency.USDT.equals(cs.getCoin_name())) {
-                usdtNum = cs.getCoin_num();
-                totalNum += usdtNum;
-            } else {
-                totalNum += cs.getCoin_num() * cs.getMarket_price();
-                coinNum += cs.getCoin_num() * cs.getMarket_price();
-            }
-        }
+    private List<CoinSummaryVo> querySummary() {
+        IndexPageVo ipv = blockchainInvestApplicationImpl.querySummary(queryCoinName);
 
         Double rate = coinInfoRepository.getExchangeRate();
 
         StringBuffer sb = new StringBuffer("");
-        sb.append("总资产：").append(NumberUtil.formateNum(totalNum)).append("（")
-                .append(NumberUtil.formateNum(totalNum / rate)).append("）");
-        sb.append("  代币现值：").append(NumberUtil.formateNum(coinNum)).append("（")
-                .append(NumberUtil.formateNum(coinNum / rate)).append("）");
-        sb.append("  USDT现值：").append(NumberUtil.formateNum(usdtNum)).append("（")
-                .append(NumberUtil.formateNum(usdtNum / rate)).append("）");
-        sb.append("  现金：").append(NumberUtil.formateNum(cash)).append("（").append(NumberUtil.formateNum(cash / rate))
+        sb.append("总资产：").append(NumberUtil.formateNum(ipv.getTotalNum())).append("（")
+                .append(NumberUtil.formateNum(ipv.getTotalNum() / rate)).append("）");
+        sb.append("  代币现值：").append(NumberUtil.formateNum(ipv.getCoinNum())).append("（")
+                .append(NumberUtil.formateNum(ipv.getCoinNum() / rate)).append("）");
+        sb.append("  USDT现值：").append(NumberUtil.formateNum(ipv.getUsdtNum())).append(
+                "（")
+                .append(NumberUtil.formateNum(ipv.getUsdtNum() / rate)).append("）");
+        sb.append("  现金：").append(NumberUtil.formateNum(ipv.getCash())).append("（").append(NumberUtil.formateNum(ipv.getCash() / rate))
                 .append("）");
 
         totalNumLA.setText(sb.toString());
 
-        return result;
+        return ipv.getSummaryList();
     }
 
     public void doQuery() {

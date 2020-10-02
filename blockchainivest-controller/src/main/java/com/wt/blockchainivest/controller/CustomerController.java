@@ -5,8 +5,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class CustomerController {
 
-//    @Autowired
-//    private CoinSummaryServiceI customerService;
 //
 //    @GetMapping(value = "/customer")
 //    public MultiResponse<Customer> listCustomerByName(@RequestParam String name){

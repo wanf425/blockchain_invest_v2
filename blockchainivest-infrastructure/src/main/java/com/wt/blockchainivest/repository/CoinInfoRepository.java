@@ -1,6 +1,6 @@
 package com.wt.blockchainivest.repository;
 
-import com.wt.blockchainivest.domain.gateway.CoinInfoGateway;
+import com.wt.blockchainivest.domain.gateway.CoinInfoGatewayI;
 import com.wt.blockchainivest.domain.trasaction.CoinInfo;
 import com.wt.blockchainivest.domain.util.Constatns;
 import com.wt.blockchainivest.repository.dao.CoinInfoDao;
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class CoinInfoRepository implements CoinInfoGateway {
+public class CoinInfoRepository implements CoinInfoGatewayI {
     CoinInfoDao CoinInfoDao = new CoinInfoDao();
 
     @Override

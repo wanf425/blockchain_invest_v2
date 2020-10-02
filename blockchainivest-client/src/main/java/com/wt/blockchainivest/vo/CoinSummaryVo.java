@@ -2,7 +2,9 @@ package com.wt.blockchainivest.vo;
 
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 交易汇总
@@ -28,4 +30,5 @@ public class CoinSummaryVo {
     private Double rate_num;
     private Double asset_percent;
     private Double pre_percent;
+
 }
