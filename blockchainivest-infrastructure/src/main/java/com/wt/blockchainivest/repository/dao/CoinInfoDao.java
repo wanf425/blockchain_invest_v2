@@ -1,5 +1,7 @@
 package com.wt.blockchainivest.repository.dao;
 
+import com.wt.blockchainivest.domain.gateway.CoinInfoGatewayI;
+import com.wt.blockchainivest.domain.trasaction.CoinInfo;
 import com.wt.blockchainivest.domain.util.Constatns;
 import com.wt.blockchainivest.domain.util.LogUtil;
 import com.wt.blockchainivest.repository.dto.CoinInfoDto;
@@ -13,16 +15,24 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-public class CoinInfoDao extends BaseDao<CoinInfoDto> {
+public class CoinInfoDao extends BaseDao<CoinInfoDto> implements CoinInfoGatewayI {
 
-    public List<CoinInfoDto> queryCoinInfo(String coinName) {
-        List<CoinInfoDto> result = new ArrayList<CoinInfoDto>();
+    @Override
+    public double getExchangeRate() {
+        List<CoinInfo> list = queryCoinInfo(Constatns.Currency.RMB);
+
+        return list.get(0).getMarket_price();
+    }
+
+    @Override
+    public List<CoinInfo> queryCoinInfo(String coinName) {
+        List<CoinInfo> result = new ArrayList<CoinInfo>();
 
         try {
             List<Entity> list = runner.findAll(Entity.create("tc_coin_info").set("COIN_NAME", coinName));
 
             for (Entity en : list) {
-                result.add(en.toBeanIgnoreCase(CoinInfoDto.class));
+                result.add(en.toBeanIgnoreCase(CoinInfo.class));
             }
         } catch (SQLException e) {
             LogUtil.print("queryCoinInfo err", e);

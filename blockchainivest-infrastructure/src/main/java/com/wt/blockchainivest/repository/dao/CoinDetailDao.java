@@ -1,6 +1,7 @@
 package com.wt.blockchainivest.repository.dao;
 
 import com.mysql.cj.util.StringUtils;
+import com.wt.blockchainivest.domain.trasaction.CoinInfo;
 import com.wt.blockchainivest.repository.dto.CoinDetailDto;
 import com.wt.blockchainivest.repository.dto.CoinInfoDto;
 import com.wt.blockchainivest.repository.dto.CoinSummaryDto;
@@ -185,11 +186,11 @@ public class CoinDetailDao extends BaseDao<CoinDetailDto> {
             Date updateDate = new Date();
 
             // 修改明细数据为已结算
-            CoinInfoDto coinInfoDto = coinInfoDao.queryCoinInfo(coinName).get(0);
+            CoinInfo coinInfo = coinInfoDao.queryCoinInfo(coinName).get(0);
 
             String sql = "update tb_coin_detail set UPDATE_DATE = ?, SETTLEMENT_DATE = ? , SETTLEMENT_VERSION = ?,  SETTLEMENT_PRICE = ? where SETTLEMENT_VERSION is null and COIN_NAME = ? ";
             session.execute(sql,
-                    new Object[]{updateDate, updateDate, settlementVersion, coinInfoDto.getMarket_price(), coinName});
+                    new Object[]{updateDate, updateDate, settlementVersion, coinInfo.getMarket_price(), coinName});
 
             // 新增明细数据
             sql = "select * from tb_coin_summary where COIN_NAME = ? ";
@@ -201,7 +202,7 @@ public class CoinDetailDao extends BaseDao<CoinDetailDto> {
                     .set("OP_TYPE", Constatns.OpType.buy).set("OP_TIME", new Date())
                     .set("OP_MARKET", Constatns.Market.SYSTEM).set("REMARK", "结算生成")
                     .set("IS_SETTLEMENT", Constatns.SETTLEMENT_STATE.IS_SETTLEMENT)
-                    .set("SETTLEMENT_PRICE", coinInfoDto.getMarket_price());
+                    .set("SETTLEMENT_PRICE", coinInfo.getMarket_price());
             session.insert(entity);
 
             // 修改汇总数据

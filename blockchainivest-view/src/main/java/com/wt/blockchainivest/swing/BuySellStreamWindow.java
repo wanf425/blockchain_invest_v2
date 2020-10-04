@@ -45,8 +45,6 @@ public class BuySellStreamWindow extends BaseWindow {
     @Autowired
     private BlockchainInvestApplicationI blockchainInvestApplicationImpl;
     @Autowired
-    private CoinInfoGatewayI coinInfoRepository;
-    @Autowired
     private ConstantsDao constantsDao;
     @Autowired
     private CoinInfoWindow coinInfoWindow;
@@ -233,8 +231,7 @@ public class BuySellStreamWindow extends BaseWindow {
 
     private List<CoinSummaryVo> querySummary() {
         IndexPageVo ipv = blockchainInvestApplicationImpl.querySummary(queryCoinName);
-
-        Double rate = coinInfoRepository.getExchangeRate();
+        Double rate = blockchainInvestApplicationImpl.getExchangeRate();
 
         StringBuffer sb = new StringBuffer("");
         sb.append("总资产：").append(NumberUtil.formateNum(ipv.getTotalNum())).append("（")

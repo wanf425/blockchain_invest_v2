@@ -1,6 +1,7 @@
 package com.wt.blockchainivest.service;
 
 import com.wt.blockchainivest.api.BlockchainInvestApplicationI;
+import com.wt.blockchainivest.domain.domainService.CoinInfoService;
 import com.wt.blockchainivest.domain.domainService.CoinSummaryService;
 import com.wt.blockchainivest.domain.trasaction.CoinSummary;
 import com.wt.blockchainivest.domain.util.Constatns;
@@ -22,6 +23,8 @@ import java.util.List;
 public class BlockchainInvestApplicationImpl implements BlockchainInvestApplicationI {
     @Autowired
     CoinSummaryService coinSummaryService;
+    @Autowired
+    CoinInfoService coinInfoService;
 
     @Override
     public IndexPageVo querySummary(String coinName) {
@@ -56,6 +59,16 @@ public class BlockchainInvestApplicationImpl implements BlockchainInvestApplicat
         ipv.setUsdtNum(usdtNum);
 
         return ipv;
+    }
+
+    /**
+     * 查询人币汇率
+     *
+     * @return
+     */
+    @Override
+    public double getExchangeRate() {
+        return coinInfoService.getExchangeRate();
     }
 }
 
