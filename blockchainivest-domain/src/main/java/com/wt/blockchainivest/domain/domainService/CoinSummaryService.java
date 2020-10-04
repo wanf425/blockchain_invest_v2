@@ -17,9 +17,9 @@ import java.util.List;
 public class CoinSummaryService {
 
     @Autowired
-    private CoinSummaryGatewayI coinInfoSummaryRepositoryImpl;
+    private CoinSummaryGatewayI coinSummaryDao;
 
     public List<CoinSummary> querySummary(String coinName) {
-        return coinInfoSummaryRepositoryImpl.querySummary(coinName);
+        return coinSummaryDao.querySummary(coinName);
     }
 }

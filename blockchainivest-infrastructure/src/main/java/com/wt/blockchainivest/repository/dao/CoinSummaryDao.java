@@ -1,6 +1,8 @@
 package com.wt.blockchainivest.repository.dao;
 
 import com.mysql.cj.util.StringUtils;
+import com.wt.blockchainivest.domain.gateway.CoinSummaryGatewayI;
+import com.wt.blockchainivest.domain.trasaction.CoinSummary;
 import com.wt.blockchainivest.domain.util.CommonUtil;
 import com.wt.blockchainivest.domain.util.Constatns;
 import com.wt.blockchainivest.domain.util.LogUtil;
@@ -23,8 +25,62 @@ import static com.wt.blockchainivest.domain.util.NumberUtil.add;
 import static com.wt.blockchainivest.domain.util.NumberUtil.sub;
 
 @Component
-public class CoinSummaryDao extends BaseDao<CoinSummaryDto> {
+public class CoinSummaryDao extends BaseDao<CoinSummaryDto> implements CoinSummaryGatewayI {
     CoinInfoDao coinInfoDao = new CoinInfoDao();
+
+    @Override
+    public List<CoinSummary> querySummary(String coinName) {
+        List<CoinSummary> result = new ArrayList<>();
+
+        try {
+            StringBuffer sql = new StringBuffer("SELECT s.*, i.market_price,i.percent as pre_percent ");
+            sql.append(" FROM tb_coin_summary s inner JOIN tc_coin_info i ON s.coin_name = i.coin_name ");
+
+            Object[] params = new Object[]{};
+
+            if (!StringUtils.isNullOrEmpty(coinName)) {
+                sql.append(" WHERE s.COIN_NAME = ?");
+                params = new Object[]{coinName};
+            }
+
+            sql.append(" ORDER BY s.coin_name ");
+
+            List<Entity> list = runner.query(sql.toString(), params);
+
+            Double total = 0.0;
+            for (Entity en : list) {
+                CoinSummaryDto cs = en.toBeanIgnoreCase(CoinSummaryDto.class);
+                Double marketPrice = Double.valueOf(cs.getMarket_price());
+                // 总市值
+                total += marketPrice * cs.getCoin_num();
+
+                if (Constatns.Currency.USDT.equals(cs.getCoin_name())
+                        || Constatns.Currency.RMB.equals(cs.getCoin_name())) {
+                    // 人民币、USDT不计算 总花费、均价收益率和收益数
+                    cs.setTotal_cost(0.0);
+                    cs.setAvarange_price(0.0);
+                    cs.setRate_num(0.0);
+                    cs.setRate_percent(0.0);
+                } else {
+                    // 收益率
+                    cs.setRate_percent(CommonUtil.getRatePercent(cs.getAvarange_price(), marketPrice));
+                    // 收益数
+                    cs.setRate_num(CommonUtil.getRateNum(cs.getAvarange_price(), cs.getCoin_num(), marketPrice));
+                }
+
+                result.add(cs);
+            }
+
+            for (CoinSummary cs : result) {
+                Double marketPrice = Double.valueOf(cs.getMarket_price());
+                cs.setAsset_percent(NumberUtil.formateNumDouble(marketPrice * cs.getCoin_num() / total * 100));
+            }
+        } catch (SQLException e) {
+            LogUtil.print("querySummary err", e);
+        }
+
+        return result;
+    }
 
     /**
      * 查询汇总数据
@@ -66,59 +122,6 @@ public class CoinSummaryDao extends BaseDao<CoinSummaryDto> {
 
         } catch (Exception e) {
             LogUtil.print("query err", e);
-        }
-
-        return result;
-    }
-
-    public List<CoinSummaryDto> querySummary(String coinName) {
-        List<CoinSummaryDto> result = new ArrayList<>();
-
-        try {
-            StringBuffer sql = new StringBuffer("SELECT s.*, i.market_price,i.percent as pre_percent ");
-            sql.append(" FROM tb_coin_summary s inner JOIN tc_coin_info i ON s.coin_name = i.coin_name ");
-
-            Object[] params = new Object[]{};
-
-            if (!StringUtils.isNullOrEmpty(coinName)) {
-                sql.append(" WHERE s.COIN_NAME = ?");
-                params = new Object[]{coinName};
-            }
-
-            sql.append(" ORDER BY s.coin_name ");
-
-            List<Entity> list = runner.query(sql.toString(), params);
-
-            Double total = 0.0;
-            for (Entity en : list) {
-                CoinSummaryDto cs = en.toBeanIgnoreCase(CoinSummaryDto.class);
-                Double marketPrice = Double.valueOf(cs.getMarket_price());
-                // 总市值
-                total += marketPrice * cs.getCoin_num();
-
-                if (Constatns.Currency.USDT.equals(cs.getCoin_name())
-                        || Constatns.Currency.RMB.equals(cs.getCoin_name())) {
-                    // 人民币、USDT不计算 总花费、均价收益率和收益数
-                    cs.setTotal_cost(0.0);
-                    cs.setAvarange_price(0.0);
-                    cs.setRate_num(0.0);
-                    cs.setRate_percent(0.0);
-                } else {
-                    // 收益率
-                    cs.setRate_percent(CommonUtil.getRatePercent(cs.getAvarange_price(), marketPrice));
-                    // 收益数
-                    cs.setRate_num(CommonUtil.getRateNum(cs.getAvarange_price(), cs.getCoin_num(), marketPrice));
-                }
-
-                result.add(cs);
-            }
-
-            for (CoinSummaryDto cs : result) {
-                Double marketPrice = Double.valueOf(cs.getMarket_price());
-                cs.setAsset_percent(NumberUtil.formateNumDouble(marketPrice * cs.getCoin_num() / total * 100));
-            }
-        } catch (SQLException e) {
-            LogUtil.print("querySummary err", e);
         }
 
         return result;

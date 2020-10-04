@@ -1,6 +1,7 @@
 package com.wt.blockchainivest.repository.dao;
 
 import com.wt.blockchainivest.domain.gateway.CoinInfoGatewayI;
+import com.wt.blockchainivest.domain.trasaction.CoinSummary;
 import com.wt.blockchainivest.domain.util.Constatns;
 import com.wt.blockchainivest.domain.util.LogUtil;
 import com.wt.blockchainivest.domain.util.NumberUtil;
@@ -82,8 +83,8 @@ public class EarningDao extends BaseDao<EarningDto> {
             totalInvest = totalInvest + currentInvest;
 
             // 总市值
-            List<CoinSummaryDto> summary = coinSummaryDao.querySummary("");
-            for (CoinSummaryDto cs : summary) {
+            List<CoinSummary> summary = coinSummaryDao.querySummary("");
+            for (CoinSummary cs : summary) {
                 totalValue += cs.getCoin_num() * cs.getMarket_price();
             }
             totalValue = totalValue / coinInfoRepository.getExchangeRate();
