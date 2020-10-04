@@ -8,8 +8,9 @@ import java.util.List;
 public interface BlockchainInvestApplicationI {
 
     /**
-     * 首页-查询汇总信息
+     * 查询汇总信息
      *
+     * @param coinName
      * @return
      */
     IndexPageVo querySummary(String coinName);

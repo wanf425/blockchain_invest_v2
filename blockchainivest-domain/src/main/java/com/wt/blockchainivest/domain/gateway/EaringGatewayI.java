@@ -6,6 +6,5 @@ package com.wt.blockchainivest.domain.gateway;
  * @author: wang tao
  * @create: 2020-10-04 17:43
  */
-public interface CoinDetailGatewayI {
-
+public interface EaringGatewayI {
 }

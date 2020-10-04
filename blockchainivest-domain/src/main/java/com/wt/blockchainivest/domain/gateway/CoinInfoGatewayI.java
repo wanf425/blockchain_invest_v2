@@ -5,7 +5,10 @@ import com.wt.blockchainivest.domain.trasaction.CoinInfo;
 import java.util.List;
 
 /**
- * @author wangtao
+ * @program: blockchainivest
+ * @description:
+ * @author: wang tao
+ * @create: 2020-10-04 17:43
  */
 public interface CoinInfoGatewayI {
 
