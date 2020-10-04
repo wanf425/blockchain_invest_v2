@@ -12,6 +12,7 @@ import com.wt.blockchainivest.repository.dto.CoinInfoDto;
 import com.wt.blockchainivest.repository.dto.CoinSummaryDto;
 import com.xiaoleilu.hutool.bean.BeanUtil;
 import com.xiaoleilu.hutool.db.Entity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.sql.SQLException;
@@ -26,7 +27,8 @@ import static com.wt.blockchainivest.domain.util.NumberUtil.sub;
 
 @Component
 public class CoinSummaryDao extends BaseDao<CoinSummaryDto> implements CoinSummaryGatewayI {
-    CoinInfoDao coinInfoDao = new CoinInfoDao();
+    @Autowired
+    private CoinInfoDao coinInfoDao;
 
     @Override
     public List<CoinSummary> querySummary(String coinName) {

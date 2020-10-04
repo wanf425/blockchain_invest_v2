@@ -20,7 +20,8 @@ public class EarningDao extends BaseDao<EarningDto> {
 
     @Autowired
     private CoinInfoGatewayI coinInfoRepository;
-    private CoinSummaryDao coinSummaryDao = new CoinSummaryDao();
+    @Autowired
+    private CoinSummaryDao coinSummaryDao;
 
     public List<EarningDto> query() {
         List<EarningDto> result = new ArrayList<>();
