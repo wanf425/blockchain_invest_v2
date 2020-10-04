@@ -1,14 +1,14 @@
 package com.wt.blockchainivest.swing;
 
 import com.mysql.cj.util.StringUtils;
+import com.wt.blockchainivest.api.BlockchainInvestApplicationI;
 import com.wt.blockchainivest.domain.util.CommonUtil;
 import com.wt.blockchainivest.domain.util.Constatns.ConstatnsKey;
 import com.wt.blockchainivest.domain.util.NumberUtil;
 import com.wt.blockchainivest.repository.dao.CoinDetailDao;
 import com.wt.blockchainivest.repository.dao.CoinSummaryDao;
-import com.wt.blockchainivest.repository.dao.ConstantsDao;
 import com.wt.blockchainivest.repository.dto.CoinSummaryDto;
-import com.wt.blockchainivest.repository.dto.ConstantsDto;
+import com.wt.blockchainivest.vo.ConstantsVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -30,7 +30,7 @@ public class RefundWindow extends BaseWindow {
     private final JLabel remarkLA = new JLabel("备注：");
     private final JTextField remarkTF = new JTextField();
     @Autowired
-    private ConstantsDao constantsDao;
+    private BlockchainInvestApplicationI blockchainInvestApplicationImpl;
     @Autowired
     private CoinSummaryDao coinSummaryDao;
     @Autowired
@@ -38,7 +38,7 @@ public class RefundWindow extends BaseWindow {
     private JFrame frame;
     // 预期数量文本框
     private JTextField expectCoinNumTF;
-    private JComboBox<ConstantsDto> coinNameCB = new JComboBox<ConstantsDto>();
+    private JComboBox<ConstantsVo> coinNameCB = new JComboBox<>();
     // 保存按钮
     private JButton saveBtn = new JButton("保存");
     // 当前数量
@@ -71,7 +71,7 @@ public class RefundWindow extends BaseWindow {
     private void refresh() {
         frame.setVisible(true);
 
-        ConstantsDto c = (ConstantsDto) coinNameCB.getSelectedItem();
+        ConstantsVo c = (ConstantsVo) coinNameCB.getSelectedItem();
         List<CoinSummaryDto> csList = coinSummaryDao.query(c.getKey());
 
         CoinSummaryDto coinSummaryDto = null;
@@ -191,8 +191,8 @@ public class RefundWindow extends BaseWindow {
 
     private void initDate() {
         // 币种 下拉框
-        List<ConstantsDto> coinNames =
-                constantsDao.queryByType(ConstatnsKey.COIN_NAME);
+        List<ConstantsVo> coinNames =
+                blockchainInvestApplicationImpl.queryByType(ConstatnsKey.COIN_NAME);
         CommonUtil.initialComboBox(coinNames, coinNameCB, c -> c.getValue());
     }
 
@@ -201,7 +201,7 @@ public class RefundWindow extends BaseWindow {
      */
     private void addListener() {
         coinNameCB.addItemListener(t -> {
-            ConstantsDto c = (ConstantsDto) t.getItem();
+            ConstantsVo c = (ConstantsVo) t.getItem();
             List<CoinSummaryDto> csList = coinSummaryDao.query(c.getKey());
 
             if (csList != null && csList.size() > 0) {
@@ -237,7 +237,7 @@ public class RefundWindow extends BaseWindow {
                     throw new Exception("缺少必填项");
                 }
 
-                ConstantsDto c = (ConstantsDto) coinNameCB.getSelectedItem();
+                ConstantsVo c = (ConstantsVo) coinNameCB.getSelectedItem();
                 coinDetailDao.doRefund(c.getKey(), Double.valueOf(refundNumValue.getText()), remarkTF.getText());
                 JOptionPane.showMessageDialog(null, "保存成功！");
             } catch (Exception ex) {

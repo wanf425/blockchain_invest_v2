@@ -3,14 +3,18 @@ package com.wt.blockchainivest.service;
 import com.wt.blockchainivest.api.BlockchainInvestApplicationI;
 import com.wt.blockchainivest.domain.domainService.CoinInfoService;
 import com.wt.blockchainivest.domain.domainService.CoinSummaryService;
+import com.wt.blockchainivest.domain.domainService.ConstantsService;
 import com.wt.blockchainivest.domain.trasaction.CoinSummary;
+import com.wt.blockchainivest.domain.trasaction.Constants;
 import com.wt.blockchainivest.domain.util.Constatns;
 import com.wt.blockchainivest.vo.CoinSummaryVo;
+import com.wt.blockchainivest.vo.ConstantsVo;
 import com.wt.blockchainivest.vo.IndexPageVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -25,6 +29,8 @@ public class BlockchainInvestApplicationImpl implements BlockchainInvestApplicat
     CoinSummaryService coinSummaryService;
     @Autowired
     CoinInfoService coinInfoService;
+    @Autowired
+    ConstantsService constantsService;
 
     @Override
     public IndexPageVo querySummary(String coinName) {
@@ -69,6 +75,20 @@ public class BlockchainInvestApplicationImpl implements BlockchainInvestApplicat
     @Override
     public double getExchangeRate() {
         return coinInfoService.getExchangeRate();
+    }
+
+    @Override
+    public List<ConstantsVo> queryByType(String type) {
+        List<Constants> list = constantsService.queryByType(type);
+
+        List<ConstantsVo> reuslt = new ArrayList<>();
+        for (Constants constants : list) {
+            ConstantsVo vo = new ConstantsVo();
+            BeanUtils.copyProperties(constants, vo);
+            reuslt.add(vo);
+        }
+
+        return reuslt;
     }
 }
 

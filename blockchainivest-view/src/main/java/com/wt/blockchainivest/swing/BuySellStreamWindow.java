@@ -1,17 +1,13 @@
 package com.wt.blockchainivest.swing;
 
 import com.wt.blockchainivest.api.BlockchainInvestApplicationI;
-import com.wt.blockchainivest.domain.gateway.CoinInfoGatewayI;
 import com.wt.blockchainivest.domain.util.CommonUtil;
-import com.wt.blockchainivest.domain.util.Constatns;
 import com.wt.blockchainivest.domain.util.Constatns.ConstatnsKey;
 import com.wt.blockchainivest.domain.util.LogUtil;
 import com.wt.blockchainivest.domain.util.NumberUtil;
-import com.wt.blockchainivest.repository.dao.CoinSummaryDao;
-import com.wt.blockchainivest.repository.dao.ConstantsDao;
-import com.wt.blockchainivest.repository.dto.CoinSummaryDto;
 import com.wt.blockchainivest.repository.dto.ConstantsDto;
 import com.wt.blockchainivest.vo.CoinSummaryVo;
+import com.wt.blockchainivest.vo.ConstantsVo;
 import com.wt.blockchainivest.vo.IndexPageVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -29,7 +25,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -44,8 +39,6 @@ public class BuySellStreamWindow extends BaseWindow {
     private static final long serialVersionUID = 1L;
     @Autowired
     private BlockchainInvestApplicationI blockchainInvestApplicationImpl;
-    @Autowired
-    private ConstantsDao constantsDao;
     @Autowired
     private CoinInfoWindow coinInfoWindow;
     @Autowired
@@ -63,7 +56,7 @@ public class BuySellStreamWindow extends BaseWindow {
     private JPanel contentPane;
     private JTable table;
     private JLabel coinNameLA = new JLabel("币种：");
-    private JComboBox<ConstantsDto> coinNameCB = new JComboBox<ConstantsDto>();
+    private JComboBox<ConstantsVo> coinNameCB = new JComboBox<ConstantsVo>();
     private JButton queryBtn = new JButton("查询");
     private JButton buySellBtn = new JButton("买卖操作");
     private JButton assetBtn = new JButton("资产统计");
@@ -223,9 +216,9 @@ public class BuySellStreamWindow extends BaseWindow {
      */
     private void initDate() {
         // 币种 下拉框
-        List<ConstantsDto> coinNames =
-                constantsDao.queryByType(ConstatnsKey.COIN_NAME);
-        coinNames.add(0, new ConstantsDto("", "全部"));
+        List<ConstantsVo> coinNames =
+                blockchainInvestApplicationImpl.queryByType(ConstatnsKey.COIN_NAME);
+        coinNames.add(0, new ConstantsVo("", "全部"));
         CommonUtil.initialComboBox(coinNames, coinNameCB, c -> c.getValue());
     }
 
