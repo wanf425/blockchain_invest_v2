@@ -12,7 +12,7 @@ import com.wt.blockchainivest.domain.util.Constatns;
 import com.wt.blockchainivest.vo.CoinDetailVo;
 import com.wt.blockchainivest.vo.CoinSummaryVo;
 import com.wt.blockchainivest.vo.ConstantsVo;
-import com.wt.blockchainivest.vo.IndexPageVo;
+import com.wt.blockchainivest.vo.CoinSummaryPageVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,8 +38,8 @@ public class InvestApplicationImpl implements InvestApplicationI {
     ConstantsService constantsService;
 
     @Override
-    public IndexPageVo querySummary(String coinName) {
-        IndexPageVo ipv = new IndexPageVo();
+    public CoinSummaryPageVo querySummary(String coinName) {
+        CoinSummaryPageVo ipv = new CoinSummaryPageVo();
         List<CoinSummary> list = coinSummaryService.querySummary(coinName);
 
         Double totalNum = 0.0;
@@ -118,6 +118,13 @@ public class InvestApplicationImpl implements InvestApplicationI {
     @Override
     public boolean doRollBack() {
         return coinDetailService.doRollBack();
+    }
+
+    @Override
+    public void saveDetail(CoinDetailVo CoinDetailVo) throws Exception {
+        CoinDetail coinDetail = new CoinDetail();
+        BeanUtils.copyProperties(CoinDetailVo, coinDetail);
+        coinDetailService.save(coinDetail);
     }
 }
 

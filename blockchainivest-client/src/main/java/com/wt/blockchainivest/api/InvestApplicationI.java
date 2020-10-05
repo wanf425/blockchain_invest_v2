@@ -2,7 +2,7 @@ package com.wt.blockchainivest.api;
 
 import com.wt.blockchainivest.vo.CoinDetailVo;
 import com.wt.blockchainivest.vo.ConstantsVo;
-import com.wt.blockchainivest.vo.IndexPageVo;
+import com.wt.blockchainivest.vo.CoinSummaryPageVo;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ public interface InvestApplicationI {
      * @param coinName
      * @return
      */
-    IndexPageVo querySummary(String coinName);
+    CoinSummaryPageVo querySummary(String coinName);
 
     /**
      * 查询人币汇率
@@ -53,6 +53,14 @@ public interface InvestApplicationI {
      * 根据备份的交易明细数据，回滚
      */
     boolean doRollBack();
+
+    /**
+     * 保存明细信息
+     *
+     * @param CoinDetailVo
+     * @return
+     */
+    void saveDetail(CoinDetailVo CoinDetailVo) throws Exception;
 
 
 }

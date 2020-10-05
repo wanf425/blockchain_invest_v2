@@ -9,10 +9,9 @@ import com.wt.blockchainivest.domain.util.Constatns.Market;
 import com.wt.blockchainivest.domain.util.Constatns.OpType;
 import com.wt.blockchainivest.domain.util.LogUtil;
 import com.wt.blockchainivest.domain.util.NumberUtil;
-import com.wt.blockchainivest.repository.dao.CoinDetailDao;
-import com.wt.blockchainivest.repository.dao.CoinSummaryDao;
-import com.wt.blockchainivest.repository.dto.CoinDetailDto;
-import com.wt.blockchainivest.repository.dto.CoinSummaryDto;
+import com.wt.blockchainivest.vo.CoinDetailVo;
+import com.wt.blockchainivest.vo.CoinSummaryPageVo;
+import com.wt.blockchainivest.vo.CoinSummaryVo;
 import com.wt.blockchainivest.vo.ConstantsVo;
 import net.miginfocom.swing.MigLayout;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,14 +45,10 @@ public class BuySellRecordsWindow extends BaseWindow {
     @Autowired
     private InvestApplicationI investApplicationImpl;
     @Autowired
-    private CoinDetailDao coinDetailDao;
-    @Autowired
-    private CoinSummaryDao coinSummaryDao;
-    @Autowired
     private BuySellStreamWindow buySellStreamWindow;
 
     private DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    private Map<String, CoinSummaryDto> summaryMap = new HashMap<>();
+    private Map<String, CoinSummaryVo> summaryMap = new HashMap<>();
 
     private JFrame frame;
     private JLabel opTypeLA;
@@ -107,13 +102,15 @@ public class BuySellRecordsWindow extends BaseWindow {
 
     public void refresh() {
         // 查询汇总数据
-        List<CoinSummaryDto> list = coinSummaryDao.queryAll();
+        CoinSummaryPageVo vo = investApplicationImpl.querySummary("");
+        List<CoinSummaryVo> list = vo.getSummaryList();
+
         list.forEach(t -> summaryMap.put(t.getCoin_name(), t));
 
         this.frame.setVisible(true);
 
         ConstantsVo c = (ConstantsVo) coinNameCB.getSelectedItem();
-        CoinSummaryDto cs = summaryMap.get(c.getKey());
+        CoinSummaryVo cs = summaryMap.get(c.getKey());
         accountNum.setText(cs != null ? cs.getTotal_cost().toString() : "");
     }
 
@@ -238,7 +235,7 @@ public class BuySellRecordsWindow extends BaseWindow {
         // 币种信息
 
         ConstantsVo constants = (ConstantsVo) coinNameCB.getSelectedItem();
-        CoinSummaryDto cs = summaryMap.get(constants.getValue());
+        CoinSummaryVo cs = summaryMap.get(constants.getValue());
 
         Double accountNum = 0.0;
         Double coinNum = NumberUtil.toDouble(coinNumTF.getText());
@@ -388,7 +385,7 @@ public class BuySellRecordsWindow extends BaseWindow {
             }
 
             // 获取页面数据
-            CoinDetailDto cd = new CoinDetailDto();
+            CoinDetailVo cd = new CoinDetailVo();
             try {
                 cd.setOp_type(opType);
                 cd.setCoin_name(coinName);
@@ -419,7 +416,7 @@ public class BuySellRecordsWindow extends BaseWindow {
             }
 
             // 保存
-            coinDetailDao.doSave(cd);
+            investApplicationImpl.saveDetail(cd);
             JOptionPane.showMessageDialog(null, "保存成功！");
             if (buySellStreamWindow != null) {
                 buySellStreamWindow.doQuery();

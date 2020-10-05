@@ -132,7 +132,8 @@ public class CoinDetailDao extends BaseDao<CoinDetailDto> implements CoinDetailG
         }
     }
 
-    public void doSave(CoinDetailDto detail) throws Exception {
+    @Override
+    public void doSave(CoinDetail detail) throws Exception {
 
         // 代币明细数据
         try {
@@ -169,7 +170,7 @@ public class CoinDetailDao extends BaseDao<CoinDetailDto> implements CoinDetailG
         }
     }
 
-    private Double getServiceCharge(String coinName, CoinDetailDto detail) {
+    private Double getServiceCharge(String coinName, CoinDetail detail) {
         if (detail.getServcieChargeCurrency().equals(coinName)) {
             return detail.getService_charge();
         } else {

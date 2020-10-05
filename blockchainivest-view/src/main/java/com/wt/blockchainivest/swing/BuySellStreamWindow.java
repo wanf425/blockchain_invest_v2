@@ -7,7 +7,7 @@ import com.wt.blockchainivest.domain.util.LogUtil;
 import com.wt.blockchainivest.domain.util.NumberUtil;
 import com.wt.blockchainivest.vo.CoinSummaryVo;
 import com.wt.blockchainivest.vo.ConstantsVo;
-import com.wt.blockchainivest.vo.IndexPageVo;
+import com.wt.blockchainivest.vo.CoinSummaryPageVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -222,7 +222,7 @@ public class BuySellStreamWindow extends BaseWindow {
     }
 
     private List<CoinSummaryVo> querySummary() {
-        IndexPageVo ipv = investApplicationImpl.querySummary(queryCoinName);
+        CoinSummaryPageVo ipv = investApplicationImpl.querySummary(queryCoinName);
         Double rate = investApplicationImpl.getExchangeRate();
 
         StringBuffer sb = new StringBuffer("");

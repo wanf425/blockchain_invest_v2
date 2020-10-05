@@ -29,4 +29,12 @@ public interface CoinDetailGatewayI {
      * 根据备份的交易明细数据，回滚
      */
     boolean doRollBack();
+
+    /**
+     * 保存明细信息
+     *
+     * @param detail
+     * @return
+     */
+    void doSave(CoinDetail detail) throws Exception;
 }

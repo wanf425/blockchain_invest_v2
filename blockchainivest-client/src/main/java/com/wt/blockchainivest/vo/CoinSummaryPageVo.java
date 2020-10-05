@@ -12,7 +12,7 @@ import java.util.List;
  * @create: 2020-10-02 13:20
  */
 @Data
-public class IndexPageVo {
+public class CoinSummaryPageVo {
 
     /**
      * 汇总列表

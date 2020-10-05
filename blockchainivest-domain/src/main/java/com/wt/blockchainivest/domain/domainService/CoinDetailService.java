@@ -32,4 +32,8 @@ public class CoinDetailService {
     public boolean doRollBack() {
         return coinDetailDao.doRollBack();
     }
+
+    public void save(CoinDetail detail) throws Exception {
+        coinDetailDao.doSave(detail);
+    }
 }
