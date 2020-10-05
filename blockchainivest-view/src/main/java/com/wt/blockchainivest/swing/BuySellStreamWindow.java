@@ -1,11 +1,10 @@
 package com.wt.blockchainivest.swing;
 
-import com.wt.blockchainivest.api.BlockchainInvestApplicationI;
+import com.wt.blockchainivest.api.InvestApplicationI;
 import com.wt.blockchainivest.domain.util.CommonUtil;
 import com.wt.blockchainivest.domain.util.Constatns.ConstatnsKey;
 import com.wt.blockchainivest.domain.util.LogUtil;
 import com.wt.blockchainivest.domain.util.NumberUtil;
-import com.wt.blockchainivest.repository.dto.ConstantsDto;
 import com.wt.blockchainivest.vo.CoinSummaryVo;
 import com.wt.blockchainivest.vo.ConstantsVo;
 import com.wt.blockchainivest.vo.IndexPageVo;
@@ -38,7 +37,7 @@ import java.util.List;
 public class BuySellStreamWindow extends BaseWindow {
     private static final long serialVersionUID = 1L;
     @Autowired
-    private BlockchainInvestApplicationI blockchainInvestApplicationImpl;
+    private InvestApplicationI investApplicationImpl;
     @Autowired
     private CoinInfoWindow coinInfoWindow;
     @Autowired
@@ -217,14 +216,14 @@ public class BuySellStreamWindow extends BaseWindow {
     private void initDate() {
         // 币种 下拉框
         List<ConstantsVo> coinNames =
-                blockchainInvestApplicationImpl.queryByType(ConstatnsKey.COIN_NAME);
+                investApplicationImpl.queryByType(ConstatnsKey.COIN_NAME);
         coinNames.add(0, new ConstantsVo("", "全部"));
         CommonUtil.initialComboBox(coinNames, coinNameCB, c -> c.getValue());
     }
 
     private List<CoinSummaryVo> querySummary() {
-        IndexPageVo ipv = blockchainInvestApplicationImpl.querySummary(queryCoinName);
-        Double rate = blockchainInvestApplicationImpl.getExchangeRate();
+        IndexPageVo ipv = investApplicationImpl.querySummary(queryCoinName);
+        Double rate = investApplicationImpl.getExchangeRate();
 
         StringBuffer sb = new StringBuffer("");
         sb.append("总资产：").append(NumberUtil.formateNum(ipv.getTotalNum())).append("（")
@@ -257,7 +256,8 @@ public class BuySellStreamWindow extends BaseWindow {
         queryBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                queryCoinName = ((ConstantsDto) coinNameCB.getSelectedItem()).getKey();
+                queryCoinName =
+                        ((ConstantsVo) coinNameCB.getSelectedItem()).getKey();
                 doQuery();
             }
         });

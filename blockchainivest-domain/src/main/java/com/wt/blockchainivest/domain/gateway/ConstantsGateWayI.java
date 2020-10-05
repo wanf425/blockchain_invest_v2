@@ -11,7 +11,6 @@ import java.util.List;
  * @author: wang tao
  * @create: 2020-10-04 17:43
  */
-@Component
 public interface ConstantsGateWayI {
 
     List<Constants> queryByType(String type);

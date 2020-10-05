@@ -1,6 +1,8 @@
 package com.wt.blockchainivest.repository.dao;
 
 import com.mysql.cj.util.StringUtils;
+import com.wt.blockchainivest.domain.gateway.CoinDetailGatewayI;
+import com.wt.blockchainivest.domain.trasaction.CoinDetail;
 import com.wt.blockchainivest.domain.trasaction.CoinInfo;
 import com.wt.blockchainivest.repository.dto.CoinDetailDto;
 import com.wt.blockchainivest.repository.dto.CoinInfoDto;
@@ -18,7 +20,7 @@ import java.util.Date;
 import java.util.List;
 
 @Component
-public class CoinDetailDao extends BaseDao<CoinDetailDto> {
+public class CoinDetailDao extends BaseDao<CoinDetailDto> implements CoinDetailGatewayI {
     @Autowired
     private CoinInfoDao coinInfoDao;
     @Autowired
@@ -224,16 +226,103 @@ public class CoinDetailDao extends BaseDao<CoinDetailDto> {
      * @param id
      * @return
      */
-    public List<CoinDetailDto> queryById(int id) {
-        List<CoinDetailDto> result = new ArrayList<>();
+    @Override
+    public List<CoinDetail> queryById(int id) {
+        List<CoinDetail> result = new ArrayList<>();
 
         try {
             String sql = "select * from tb_coin_detail where ID > ? ORDER BY ID DESC";
             List<Entity> list = runner.query(sql, new Object[]{id});
 
-            list.forEach(en -> result.add(en.toBeanIgnoreCase(CoinDetailDto.class)));
+            list.forEach(en -> result.add(en.toBeanIgnoreCase(CoinDetail.class)));
         } catch (Exception e) {
             LogUtil.print("query err", e);
+        }
+
+        return result;
+    }
+
+    /**
+     * 备份
+     */
+    @Override
+    public boolean doBackUp() {
+        boolean result = false;
+        try {
+            session.beginTransaction();
+
+/*          忘记这段代码为什么要这么写了，先删掉
+            // 修改配置表回滚ID
+            String sql = "select t2.VALUE from tc_constants t2 where t2.TYPE = ? and t2.KEY = ?";
+            List<Entity> rollbackId = session.query(sql,
+                    new Object[]{Constatns.ConstatnsKey.MAX_DETAIL_ID, Constatns.MaxDetailID.BACKUP_ID});
+            Object rollbackIdValue = rollbackId.get(0).get("VALUE");
+
+            sql = "update tc_constants t set t.VALUE = ? where t.TYPE = ? and t.KEY = ? ";
+            session.execute(sql, new Object[]{rollbackIdValue, Constatns.ConstatnsKey.MAX_DETAIL_ID, Constatns.MaxDetailID.ROLLBACK_ID});
+
+            // 修改配置表备份ID
+            sql = "select max(id) as id from tb_coin_detail";
+            List<Entity> maxId = session.query(sql);
+            Object maxIdValue = maxId.get(0).get("id");
+
+            sql = "update tc_constants t set t.VALUE = ? where t.TYPE = ? and t.KEY = ? ";
+            session.execute(sql, new Object[]{maxIdValue, Constatns.ConstatnsKey.MAX_DETAIL_ID, Constatns.MaxDetailID.BACKUP_ID});*/
+
+            // 备份数据
+            String sql = "delete from backup_tb_coin_detail ";
+            session.execute(sql);
+            sql = "insert into backup_tb_coin_detail select * from tb_coin_detail ";
+            session.execute(sql);
+            sql = "delete from backup_tb_coin_summary ";
+            session.execute(sql);
+            sql = "insert into backup_tb_coin_summary select * from tb_coin_summary; ";
+            session.execute(sql);
+
+            session.commit();
+            result = true;
+        } catch (Exception e) {
+            session.quietRollback();
+            LogUtil.print("doBackUp err", e);
+        }
+
+        return result;
+    }
+
+    /**
+     * 回滚
+     */
+    @Override
+    public boolean doRollBack() {
+        boolean result = false;
+        try {
+            session.beginTransaction();
+
+/*          忘记这段代码为什么要这么写了，先删掉
+            // 修改配置表备份ID
+            String sql = "select t2.VALUE from tc_constants t2 where t2.TYPE = ? and t2.KEY = ?";
+            List<Entity> rollbackId = session.query(sql,
+                    new Object[]{Constatns.ConstatnsKey.MAX_DETAIL_ID, Constatns.MaxDetailID.ROLLBACK_ID});
+            Object rollbackIdValue = rollbackId.get(0).get("VALUE");
+
+            sql = "update tc_constants t set t.VALUE = ? where t.TYPE = ? and t.KEY = ? ";
+            session.execute(sql, new Object[]{rollbackIdValue, Constatns.ConstatnsKey.MAX_DETAIL_ID, Constatns.MaxDetailID.BACKUP_ID});*/
+
+            // 回滚数据
+            String sql = "delete from tb_coin_detail ";
+            session.execute(sql);
+            sql = "insert into tb_coin_detail select * from backup_tb_coin_detail ";
+            session.execute(sql);
+            sql = "delete from tb_coin_summary ";
+            session.execute(sql);
+            sql = "insert into tb_coin_summary select * from backup_tb_coin_summary; ";
+            session.execute(sql);
+
+            session.commit();
+            result = true;
+        } catch (Exception e) {
+            session.quietRollback();
+            LogUtil.print("doCancel err", e);
         }
 
         return result;

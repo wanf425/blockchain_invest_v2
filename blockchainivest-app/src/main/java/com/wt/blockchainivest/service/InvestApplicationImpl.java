@@ -1,12 +1,15 @@
 package com.wt.blockchainivest.service;
 
-import com.wt.blockchainivest.api.BlockchainInvestApplicationI;
+import com.wt.blockchainivest.api.InvestApplicationI;
+import com.wt.blockchainivest.domain.domainService.CoinDetailService;
 import com.wt.blockchainivest.domain.domainService.CoinInfoService;
 import com.wt.blockchainivest.domain.domainService.CoinSummaryService;
 import com.wt.blockchainivest.domain.domainService.ConstantsService;
+import com.wt.blockchainivest.domain.trasaction.CoinDetail;
 import com.wt.blockchainivest.domain.trasaction.CoinSummary;
 import com.wt.blockchainivest.domain.trasaction.Constants;
 import com.wt.blockchainivest.domain.util.Constatns;
+import com.wt.blockchainivest.vo.CoinDetailVo;
 import com.wt.blockchainivest.vo.CoinSummaryVo;
 import com.wt.blockchainivest.vo.ConstantsVo;
 import com.wt.blockchainivest.vo.IndexPageVo;
@@ -24,9 +27,11 @@ import java.util.List;
  * @author wangtao
  */
 @Service
-public class BlockchainInvestApplicationImpl implements BlockchainInvestApplicationI {
+public class InvestApplicationImpl implements InvestApplicationI {
     @Autowired
     CoinSummaryService coinSummaryService;
+    @Autowired
+    CoinDetailService coinDetailService;
     @Autowired
     CoinInfoService coinInfoService;
     @Autowired
@@ -89,6 +94,30 @@ public class BlockchainInvestApplicationImpl implements BlockchainInvestApplicat
         }
 
         return reuslt;
+    }
+
+    @Override
+    public List<CoinDetailVo> queryById(int id) {
+        List<CoinDetail> list = coinDetailService.queryById(id);
+
+        List<CoinDetailVo> reuslt = new ArrayList<>();
+        for (CoinDetail detail : list) {
+            CoinDetailVo vo = new CoinDetailVo();
+            BeanUtils.copyProperties(detail, vo);
+            reuslt.add(vo);
+        }
+
+        return reuslt;
+    }
+
+    @Override
+    public boolean doBackUp() {
+        return coinDetailService.doBackUp();
+    }
+
+    @Override
+    public boolean doRollBack() {
+        return coinDetailService.doRollBack();
     }
 }
 

@@ -1,11 +1,17 @@
 package com.wt.blockchainivest.api;
 
+import com.wt.blockchainivest.vo.CoinDetailVo;
 import com.wt.blockchainivest.vo.ConstantsVo;
 import com.wt.blockchainivest.vo.IndexPageVo;
 
 import java.util.List;
 
-public interface BlockchainInvestApplicationI {
+/**
+ * Application层统一接口类
+ *
+ * @author wangtao
+ */
+public interface InvestApplicationI {
 
     /**
      * 查询汇总信息
@@ -29,6 +35,24 @@ public interface BlockchainInvestApplicationI {
      * @return
      */
      List<ConstantsVo> queryByType(String type);
+
+    /**
+     * 查询比指定ID大的明细数据
+     *
+     * @param id
+     * @return
+     */
+    List<CoinDetailVo> queryById(int id);
+
+    /**
+     * 备份交易明细数据
+     */
+    boolean doBackUp();
+
+    /**
+     * 根据备份的交易明细数据，回滚
+     */
+    boolean doRollBack();
 
 
 }

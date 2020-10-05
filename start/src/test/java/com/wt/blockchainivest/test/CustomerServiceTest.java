@@ -1,7 +1,7 @@
 package com.wt.blockchainivest.test;
 
 import com.alibaba.cola.exception.BizException;
-import com.wt.blockchainivest.api.BlockchainInvestApplicationI;
+import com.wt.blockchainivest.api.InvestApplicationI;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,7 +19,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class CustomerServiceTest {
 
     @Autowired
-    private BlockchainInvestApplicationI customerService;
+    private InvestApplicationI customerService;
 
 
     @Before

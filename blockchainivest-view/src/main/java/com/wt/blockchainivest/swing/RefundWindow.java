@@ -1,7 +1,7 @@
 package com.wt.blockchainivest.swing;
 
 import com.mysql.cj.util.StringUtils;
-import com.wt.blockchainivest.api.BlockchainInvestApplicationI;
+import com.wt.blockchainivest.api.InvestApplicationI;
 import com.wt.blockchainivest.domain.util.CommonUtil;
 import com.wt.blockchainivest.domain.util.Constatns.ConstatnsKey;
 import com.wt.blockchainivest.domain.util.NumberUtil;
@@ -30,7 +30,7 @@ public class RefundWindow extends BaseWindow {
     private final JLabel remarkLA = new JLabel("备注：");
     private final JTextField remarkTF = new JTextField();
     @Autowired
-    private BlockchainInvestApplicationI blockchainInvestApplicationImpl;
+    private InvestApplicationI investApplicationImpl;
     @Autowired
     private CoinSummaryDao coinSummaryDao;
     @Autowired
@@ -192,7 +192,7 @@ public class RefundWindow extends BaseWindow {
     private void initDate() {
         // 币种 下拉框
         List<ConstantsVo> coinNames =
-                blockchainInvestApplicationImpl.queryByType(ConstatnsKey.COIN_NAME);
+                investApplicationImpl.queryByType(ConstatnsKey.COIN_NAME);
         CommonUtil.initialComboBox(coinNames, coinNameCB, c -> c.getValue());
     }
 

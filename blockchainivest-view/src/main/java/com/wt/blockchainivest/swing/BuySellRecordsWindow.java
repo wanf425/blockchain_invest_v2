@@ -1,7 +1,7 @@
 package com.wt.blockchainivest.swing;
 
 import com.mysql.cj.util.StringUtils;
-import com.wt.blockchainivest.api.BlockchainInvestApplicationI;
+import com.wt.blockchainivest.api.InvestApplicationI;
 import com.wt.blockchainivest.domain.util.CommonUtil;
 import com.wt.blockchainivest.domain.util.Constatns.ConstatnsKey;
 import com.wt.blockchainivest.domain.util.Constatns.Currency;
@@ -44,7 +44,7 @@ public class BuySellRecordsWindow extends BaseWindow {
 
     private static final long serialVersionUID = 3375446484591175070L;
     @Autowired
-    private BlockchainInvestApplicationI blockchainInvestApplicationImpl;
+    private InvestApplicationI investApplicationImpl;
     @Autowired
     private CoinDetailDao coinDetailDao;
     @Autowired
@@ -435,12 +435,12 @@ public class BuySellRecordsWindow extends BaseWindow {
     private void initDate() {
         // 操作类型 下拉框
         List<ConstantsVo> opTypes =
-                blockchainInvestApplicationImpl.queryByType(ConstatnsKey.OP_TYPE);
+                investApplicationImpl.queryByType(ConstatnsKey.OP_TYPE);
         CommonUtil.initialComboBox(opTypes, opTypeCB, c -> c.getValue());
 
         // 币种 下拉框
         List<ConstantsVo> coinNames =
-                blockchainInvestApplicationImpl.queryByType(ConstatnsKey.COIN_NAME);
+                investApplicationImpl.queryByType(ConstatnsKey.COIN_NAME);
         CommonUtil.initialComboBox(coinNames, coinNameCB, c -> c.getValue());
 
         // 手续费币种下拉框
@@ -453,7 +453,7 @@ public class BuySellRecordsWindow extends BaseWindow {
 
         // 货币类型 下拉框
         List<ConstantsVo> currencyType =
-                blockchainInvestApplicationImpl.queryByType(ConstatnsKey.CURRENCY_TYPE);
+                investApplicationImpl.queryByType(ConstatnsKey.CURRENCY_TYPE);
         CommonUtil.initialComboBox(currencyType, totalCostCB, c -> c.getValue());
         currencyType.forEach(t -> {
             if (Currency.USDT.equals(t.getKey())) {
@@ -463,7 +463,7 @@ public class BuySellRecordsWindow extends BaseWindow {
 
         // 交易平台 下拉框
         List<ConstantsVo> market =
-                blockchainInvestApplicationImpl.queryByType(ConstatnsKey.MARKET);
+                investApplicationImpl.queryByType(ConstatnsKey.MARKET);
         CommonUtil.initialComboBox(market, opMarketCB, c -> c.getValue());
         market.forEach(t -> {
             if (Market.HUOBI.equals(t.getKey())) {

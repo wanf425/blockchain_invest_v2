@@ -1,6 +1,7 @@
 package com.wt.blockchainivest.repository.dao;
 
 import com.wt.blockchainivest.domain.gateway.CoinInfoGatewayI;
+import com.wt.blockchainivest.domain.gateway.EaringGatewayI;
 import com.wt.blockchainivest.domain.trasaction.CoinSummary;
 import com.wt.blockchainivest.domain.util.Constatns;
 import com.wt.blockchainivest.domain.util.LogUtil;
@@ -16,7 +17,7 @@ import java.util.Date;
 import java.util.List;
 
 @Component
-public class EarningDao extends BaseDao<EarningDto> {
+public class EarningDao extends BaseDao<EarningDto> implements EaringGatewayI {
 
     @Autowired
     private CoinInfoGatewayI coinInfoRepository;
