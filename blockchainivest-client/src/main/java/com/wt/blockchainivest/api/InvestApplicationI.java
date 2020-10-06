@@ -1,6 +1,7 @@
 package com.wt.blockchainivest.api;
 
 import com.wt.blockchainivest.vo.CoinDetailVo;
+import com.wt.blockchainivest.vo.CoinInfoVo;
 import com.wt.blockchainivest.vo.ConstantsVo;
 import com.wt.blockchainivest.vo.CoinSummaryPageVo;
 
@@ -62,5 +63,20 @@ public interface InvestApplicationI {
      */
     void saveDetail(CoinDetailVo CoinDetailVo) throws Exception;
 
+    /**
+     * 批量修改代币基础信息
+     *
+     * @param list
+     * @return
+     */
+    void updateCoinInfos(List<CoinInfoVo> list);
+
+    /**
+     * 查询代币基础信息
+     *
+     * @param coinName
+     * @return
+     */
+     List<CoinInfoVo> queryCoinInfo(String coinName);
 
 }

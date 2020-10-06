@@ -2,11 +2,11 @@ package com.wt.blockchainivest.swing;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.wt.blockchainivest.api.InvestApplicationI;
 import com.wt.blockchainivest.domain.util.CommonUtil;
 import com.wt.blockchainivest.domain.util.LogUtil;
-import com.wt.blockchainivest.repository.dao.CoinInfoDao;
 import com.wt.blockchainivest.repository.dao.CoinSummaryDao;
-import com.wt.blockchainivest.repository.dto.CoinInfoDto;
+import com.wt.blockchainivest.vo.CoinInfoVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -28,9 +28,9 @@ public class CoinInfoWindow extends BaseWindow {
     private static final long serialVersionUID = -9191839187194468465L;
     private final JButton saveBtn = new JButton("保存");
     @Autowired
-    private BuySellStreamWindow buySellStreamWindow;
+    private InvestApplicationI investApplicationImpl;
     @Autowired
-    private CoinInfoDao coinInfoDao;
+    private BuySellStreamWindow buySellStreamWindow;
     @Autowired
     private CoinSummaryDao coinSummaryDao;
     private JFrame frame;
@@ -107,9 +107,10 @@ public class CoinInfoWindow extends BaseWindow {
             public void actionPerformed(ActionEvent e) {
                 try {
                     Gson gson = new Gson();
-                    List<CoinInfoDto> list = gson.fromJson(cionInfoEP.getText(), new TypeToken<List<CoinInfoDto>>() {
-                    }.getType());
-                    coinInfoDao.updateAll(list);
+                    List<CoinInfoVo> list = gson.fromJson(cionInfoEP.getText()
+                            , new TypeToken<List<CoinInfoVo>>() {
+                            }.getType());
+                    investApplicationImpl.updateCoinInfos(list);
 
                     JOptionPane.showMessageDialog(null, "保存成功");
                     initDate();
@@ -128,7 +129,7 @@ public class CoinInfoWindow extends BaseWindow {
 
     private void initDate() {
         // 货币信息
-        List<CoinInfoDto> list = coinInfoDao.queryAllList();
+        List<CoinInfoVo> list = investApplicationImpl.queryCoinInfo(null);
         Gson gson = new Gson();
         String coinInfo = gson.toJson(list);
         cionInfoEP.setText(CommonUtil.formatJson(coinInfo));

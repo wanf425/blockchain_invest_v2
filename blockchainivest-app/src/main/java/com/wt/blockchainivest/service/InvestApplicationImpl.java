@@ -6,13 +6,11 @@ import com.wt.blockchainivest.domain.domainService.CoinInfoService;
 import com.wt.blockchainivest.domain.domainService.CoinSummaryService;
 import com.wt.blockchainivest.domain.domainService.ConstantsService;
 import com.wt.blockchainivest.domain.trasaction.CoinDetail;
+import com.wt.blockchainivest.domain.trasaction.CoinInfo;
 import com.wt.blockchainivest.domain.trasaction.CoinSummary;
 import com.wt.blockchainivest.domain.trasaction.Constants;
 import com.wt.blockchainivest.domain.util.Constatns;
-import com.wt.blockchainivest.vo.CoinDetailVo;
-import com.wt.blockchainivest.vo.CoinSummaryVo;
-import com.wt.blockchainivest.vo.ConstantsVo;
-import com.wt.blockchainivest.vo.CoinSummaryPageVo;
+import com.wt.blockchainivest.vo.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -80,6 +78,51 @@ public class InvestApplicationImpl implements InvestApplicationI {
     @Override
     public double getExchangeRate() {
         return coinInfoService.getExchangeRate();
+    }
+
+
+    /**
+     * 批量修改
+     *
+     * @param list
+     * @return
+     */
+    @Override
+    public void updateCoinInfos(List<CoinInfoVo> list) {
+
+        if (list != null && list.size() > 0) {
+            List<CoinInfo> infos = new ArrayList<>();
+
+            for (CoinInfoVo vo : list) {
+                CoinInfo coinInfo = new CoinInfo();
+                BeanUtils.copyProperties(vo, coinInfo);
+                infos.add(coinInfo);
+            }
+
+            coinInfoService.updateAll(infos);
+        }
+    }
+
+    /**
+     * 查询代币基础信息
+     *
+     * @param coinName
+     * @return
+     */
+    @Override
+    public List<CoinInfoVo> queryCoinInfo(String coinName) {
+        List<CoinInfo> coinInfos = coinInfoService.queryCoinInfo(coinName);
+        List<CoinInfoVo> result = new ArrayList<>();
+
+        if (coinInfos != null && coinInfos.size() > 0) {
+            for (CoinInfo coinInfo : coinInfos) {
+                CoinInfoVo vo = new CoinInfoVo();
+                BeanUtils.copyProperties(coinInfo, vo);
+                result.add(vo);
+            }
+        }
+
+        return result;
     }
 
     @Override

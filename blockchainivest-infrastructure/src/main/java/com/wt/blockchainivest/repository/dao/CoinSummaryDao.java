@@ -163,7 +163,7 @@ public class CoinSummaryDao extends BaseDao<CoinSummaryDto> implements CoinSumma
 
         CoinSummaryDto csSummary = new CoinSummaryDto();
         csSummary.setCoin_name(coinName);
-        Map<String, CoinInfoDto> coinInfos = coinInfoDao.queryAllMap();
+        Map<String, CoinInfo> coinInfos = coinInfoDao.queryAllMap();
 
         for (Entity en : list) {
             CoinSummaryDto cs = en.toBeanIgnoreCase(CoinSummaryDto.class);

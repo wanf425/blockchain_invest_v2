@@ -1,9 +1,11 @@
 package com.wt.blockchainivest.domain.domainService;
 
 import com.wt.blockchainivest.domain.gateway.CoinInfoGatewayI;
-import com.wt.blockchainivest.domain.gateway.CoinSummaryGatewayI;
+import com.wt.blockchainivest.domain.trasaction.CoinInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * @program: blockchainivest
@@ -23,6 +25,26 @@ public class CoinInfoService {
      */
     public double getExchangeRate() {
         return coinInfoDao.getExchangeRate();
+    }
+
+    /**
+     * 批量修改
+     *
+     * @param list
+     * @return
+     */
+    public void updateAll(List<CoinInfo> list) {
+        coinInfoDao.updateAll(list);
+    }
+
+    /**
+     * 查询代币基础信息
+     *
+     * @param coinName
+     * @return
+     */
+    public List<CoinInfo> queryCoinInfo(String coinName) {
+        return coinInfoDao.queryCoinInfo(coinName);
     }
 }
 

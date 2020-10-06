@@ -12,6 +12,12 @@ import java.util.List;
  */
 public interface CoinInfoGatewayI {
 
+    /**
+     * 查询代币基础信息
+     *
+     * @param coinName
+     * @return
+     */
     List<CoinInfo> queryCoinInfo(String coinName);
 
     /**
@@ -20,4 +26,12 @@ public interface CoinInfoGatewayI {
      * @return
      */
      double getExchangeRate();
+
+    /**
+     * 批量修改
+     *
+     * @param list
+     * @return
+     */
+    void updateAll(List<CoinInfo> list);
 }
