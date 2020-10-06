@@ -5,7 +5,6 @@ import com.google.gson.reflect.TypeToken;
 import com.wt.blockchainivest.api.InvestApplicationI;
 import com.wt.blockchainivest.domain.util.CommonUtil;
 import com.wt.blockchainivest.domain.util.LogUtil;
-import com.wt.blockchainivest.repository.dao.CoinSummaryDao;
 import com.wt.blockchainivest.vo.CoinInfoVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -31,8 +30,6 @@ public class CoinInfoWindow extends BaseWindow {
     private InvestApplicationI investApplicationImpl;
     @Autowired
     private BuySellStreamWindow buySellStreamWindow;
-    @Autowired
-    private CoinSummaryDao coinSummaryDao;
     private JFrame frame;
     private JLabel lbljson = new JLabel("使用JSON格式录入代币信息");
     private JButton formateBtn = new JButton("格式化");
@@ -116,7 +113,7 @@ public class CoinInfoWindow extends BaseWindow {
                     initDate();
                     if (buySellStreamWindow != null) {
                         buySellStreamWindow.doQuery();
-                        coinSummaryDao.updateAllSummary();
+                        investApplicationImpl.updateAllSummary();
                     }
                 } catch (Exception exc) {
                     JOptionPane.showMessageDialog(null, "保存失败");

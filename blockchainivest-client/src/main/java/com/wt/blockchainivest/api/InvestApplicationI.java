@@ -2,9 +2,10 @@ package com.wt.blockchainivest.api;
 
 import com.wt.blockchainivest.vo.CoinDetailVo;
 import com.wt.blockchainivest.vo.CoinInfoVo;
-import com.wt.blockchainivest.vo.ConstantsVo;
 import com.wt.blockchainivest.vo.CoinSummaryPageVo;
+import com.wt.blockchainivest.vo.ConstantsVo;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -23,6 +24,11 @@ public interface InvestApplicationI {
     CoinSummaryPageVo querySummary(String coinName);
 
     /**
+     * 更新所有汇总记录
+     */
+    void updateAllSummary() throws SQLException;
+
+    /**
      * 查询人币汇率
      *
      * @return
@@ -35,7 +41,7 @@ public interface InvestApplicationI {
      * @param type
      * @return
      */
-     List<ConstantsVo> queryByType(String type);
+    List<ConstantsVo> queryByType(String type);
 
     /**
      * 查询比指定ID大的明细数据
@@ -77,6 +83,6 @@ public interface InvestApplicationI {
      * @param coinName
      * @return
      */
-     List<CoinInfoVo> queryCoinInfo(String coinName);
+    List<CoinInfoVo> queryCoinInfo(String coinName);
 
 }

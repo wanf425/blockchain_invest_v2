@@ -15,6 +15,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,6 +69,14 @@ public class InvestApplicationImpl implements InvestApplicationI {
         ipv.setUsdtNum(usdtNum);
 
         return ipv;
+    }
+
+    /**
+     * 更新所有汇总记录
+     */
+    @Override
+    public void updateAllSummary() throws SQLException {
+        coinSummaryService.updateAllSummary();
     }
 
     /**

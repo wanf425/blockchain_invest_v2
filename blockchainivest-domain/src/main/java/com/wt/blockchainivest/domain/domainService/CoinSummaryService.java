@@ -5,6 +5,7 @@ import com.wt.blockchainivest.domain.trasaction.CoinSummary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -21,5 +22,12 @@ public class CoinSummaryService {
 
     public List<CoinSummary> querySummary(String coinName) {
         return coinSummaryDao.querySummary(coinName);
+    }
+
+    /**
+     * 更新所有汇总记录
+     */
+    public void updateAllSummary() throws SQLException {
+        coinSummaryDao.updateAllSummary();
     }
 }

@@ -85,6 +85,18 @@ public class CoinSummaryDao extends BaseDao<CoinSummaryDto> implements CoinSumma
     }
 
     /**
+     * 更新所有汇总记录
+     */
+    @Override
+    public void updateAllSummary() throws SQLException {
+        List<CoinSummaryDto> list = queryAll();
+
+        for (CoinSummaryDto cs : list) {
+            updateSummary(cs.getCoin_name(), true);
+        }
+    }
+
+    /**
      * 查询汇总数据
      *
      * @return
@@ -127,17 +139,6 @@ public class CoinSummaryDao extends BaseDao<CoinSummaryDto> implements CoinSumma
         }
 
         return result;
-    }
-
-    /**
-     * 更新所有汇总记录
-     */
-    public void updateAllSummary() throws SQLException {
-        List<CoinSummaryDto> list = queryAll();
-
-        for (CoinSummaryDto cs : list) {
-            updateSummary(cs.getCoin_name(), true);
-        }
     }
 
     public void updateSummary(String coinName, boolean isNeedTransaction) throws SQLException {
