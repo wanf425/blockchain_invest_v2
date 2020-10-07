@@ -1,14 +1,8 @@
 package com.wt.blockchainivest.service;
 
 import com.wt.blockchainivest.api.InvestApplicationI;
-import com.wt.blockchainivest.domain.domainService.CoinDetailService;
-import com.wt.blockchainivest.domain.domainService.CoinInfoService;
-import com.wt.blockchainivest.domain.domainService.CoinSummaryService;
-import com.wt.blockchainivest.domain.domainService.ConstantsService;
-import com.wt.blockchainivest.domain.trasaction.CoinDetail;
-import com.wt.blockchainivest.domain.trasaction.CoinInfo;
-import com.wt.blockchainivest.domain.trasaction.CoinSummary;
-import com.wt.blockchainivest.domain.trasaction.Constants;
+import com.wt.blockchainivest.domain.domainService.*;
+import com.wt.blockchainivest.domain.trasaction.*;
 import com.wt.blockchainivest.domain.util.Constatns;
 import com.wt.blockchainivest.vo.*;
 import org.springframework.beans.BeanUtils;
@@ -35,6 +29,8 @@ public class InvestApplicationImpl implements InvestApplicationI {
     CoinInfoService coinInfoService;
     @Autowired
     ConstantsService constantsService;
+    @Autowired
+    EarningService earningService;
 
     @Override
     public CoinSummaryPageVo querySummary(String coinName) {
@@ -103,8 +99,7 @@ public class InvestApplicationImpl implements InvestApplicationI {
             List<CoinInfo> infos = new ArrayList<>();
 
             for (CoinInfoVo vo : list) {
-                CoinInfo coinInfo = new CoinInfo();
-                BeanUtils.copyProperties(vo, coinInfo);
+                CoinInfo coinInfo = new CoinInfo(vo);
                 infos.add(coinInfo);
             }
 
@@ -125,9 +120,7 @@ public class InvestApplicationImpl implements InvestApplicationI {
 
         if (coinInfos != null && coinInfos.size() > 0) {
             for (CoinInfo coinInfo : coinInfos) {
-                CoinInfoVo vo = new CoinInfoVo();
-                BeanUtils.copyProperties(coinInfo, vo);
-                result.add(vo);
+                result.add(coinInfo.toVo());
             }
         }
 
@@ -140,9 +133,7 @@ public class InvestApplicationImpl implements InvestApplicationI {
 
         List<ConstantsVo> reuslt = new ArrayList<>();
         for (Constants constants : list) {
-            ConstantsVo vo = new ConstantsVo();
-            BeanUtils.copyProperties(constants, vo);
-            reuslt.add(vo);
+            reuslt.add(constants.toVo());
         }
 
         return reuslt;
@@ -154,9 +145,7 @@ public class InvestApplicationImpl implements InvestApplicationI {
 
         List<CoinDetailVo> reuslt = new ArrayList<>();
         for (CoinDetail detail : list) {
-            CoinDetailVo vo = new CoinDetailVo();
-            BeanUtils.copyProperties(detail, vo);
-            reuslt.add(vo);
+            reuslt.add(detail.toVo());
         }
 
         return reuslt;
@@ -174,9 +163,22 @@ public class InvestApplicationImpl implements InvestApplicationI {
 
     @Override
     public void saveDetail(CoinDetailVo CoinDetailVo) throws Exception {
-        CoinDetail coinDetail = new CoinDetail();
-        BeanUtils.copyProperties(CoinDetailVo, coinDetail);
+        CoinDetail coinDetail = new CoinDetail(CoinDetailVo);
         coinDetailService.save(coinDetail);
+    }
+
+    @Override
+    public List<EarningVo> query() {
+        List<EarningVo> result = new ArrayList<>();
+        List<Earning> list = earningService.query();
+
+        if (list != null && list.size() > 0) {
+            for (Earning earning : list) {
+                result.add(earning.toVo());
+            }
+        }
+
+        return result;
     }
 }
 

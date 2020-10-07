@@ -15,9 +15,11 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
+import com.wt.blockchainivest.api.InvestApplicationI;
 import com.wt.blockchainivest.repository.dao.EarningDao;
 import com.wt.blockchainivest.repository.dto.EarningDto;
 import com.wt.blockchainivest.domain.util.NumberUtil;
+import com.wt.blockchainivest.vo.EarningVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -33,10 +35,12 @@ public class EarningWindow extends BaseWindow {
 
 	@Autowired
 	private EarningDao earningDao;
+	@Autowired
+	private InvestApplicationI investApplicationImpl;
 
 	private JFrame frame;
 	private JTable table;
-	private List<EarningDto> earningList = null;
+	private List<EarningVo> earningList = null;
 	private JButton button = new JButton("结算");
 
 	/**
@@ -63,7 +67,7 @@ public class EarningWindow extends BaseWindow {
 
 	public void refresh() {
 		this.frame.setVisible(true);
-		earningList = earningDao.query();
+		earningList = investApplicationImpl.query();
 		table.updateUI();
 	}
 
@@ -169,9 +173,9 @@ public class EarningWindow extends BaseWindow {
 		};
 	}
 
-	public List<EarningDto> getData() {
+	public List<EarningVo> getData() {
 		if (earningList == null) {
-			earningList = earningDao.query();
+			earningList = investApplicationImpl.query();
 		}
 
 		return earningList;

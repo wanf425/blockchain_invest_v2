@@ -1,7 +1,9 @@
 package com.wt.blockchainivest.domain.trasaction;
 
 import com.alibaba.cola.domain.EntityObject;
+import com.wt.blockchainivest.vo.CoinSummaryVo;
 import lombok.Data;
+import org.springframework.beans.BeanUtils;
 
 import java.util.Date;
 
@@ -29,4 +31,18 @@ public class CoinSummary extends EntityObject {
     private Double rate_num;
     private Double asset_percent;
     private Double pre_percent;
+
+    public CoinSummary() {
+
+    }
+
+    public CoinSummary(CoinSummaryVo vo) {
+        BeanUtils.copyProperties(vo, this);
+    }
+
+    public CoinSummaryVo toVo() {
+        CoinSummaryVo vo = new CoinSummaryVo();
+        BeanUtils.copyProperties(this, vo);
+        return vo;
+    }
 }

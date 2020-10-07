@@ -2,7 +2,9 @@ package com.wt.blockchainivest.domain.trasaction;
 
 
 import com.alibaba.cola.domain.EntityObject;
+import com.wt.blockchainivest.vo.CoinDetailVo;
 import lombok.Data;
+import org.springframework.beans.BeanUtils;
 
 import java.util.Date;
 
@@ -33,4 +35,18 @@ public class CoinDetail extends EntityObject {
     private Integer is_settlement; // 是否结算生成数据
     private Date update_Date; // 修改时间
     private Date create_Date; // 创建时间
+
+    public CoinDetail() {
+
+    }
+
+    public CoinDetail(CoinDetailVo vo) {
+        BeanUtils.copyProperties(vo, this);
+    }
+
+    public CoinDetailVo toVo() {
+        CoinDetailVo vo = new CoinDetailVo();
+        BeanUtils.copyProperties(this, vo);
+        return vo;
+    }
 }

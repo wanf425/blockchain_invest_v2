@@ -1,7 +1,9 @@
 package com.wt.blockchainivest.domain.trasaction;
 
 import com.alibaba.cola.domain.EntityObject;
+import com.wt.blockchainivest.vo.EarningVo;
 import lombok.Data;
+import org.springframework.beans.BeanUtils;
 
 import java.util.Date;
 
@@ -14,4 +16,19 @@ public class Earning extends EntityObject {
     private Double current_invest; // 当期投入
     private Double increase_rate; // 增长率(去当期)
     private Double total_value; // 总市值
+
+
+    public Earning() {
+
+    }
+
+    public Earning(EarningVo vo) {
+        BeanUtils.copyProperties(vo, this);
+    }
+
+    public EarningVo toVo() {
+        EarningVo vo = new EarningVo();
+        BeanUtils.copyProperties(this, vo);
+        return vo;
+    }
 }

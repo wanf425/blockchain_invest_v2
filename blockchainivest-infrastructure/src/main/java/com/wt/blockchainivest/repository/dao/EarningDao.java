@@ -3,10 +3,10 @@ package com.wt.blockchainivest.repository.dao;
 import com.wt.blockchainivest.domain.gateway.CoinInfoGatewayI;
 import com.wt.blockchainivest.domain.gateway.EaringGatewayI;
 import com.wt.blockchainivest.domain.trasaction.CoinSummary;
+import com.wt.blockchainivest.domain.trasaction.Earning;
 import com.wt.blockchainivest.domain.util.Constatns;
 import com.wt.blockchainivest.domain.util.LogUtil;
 import com.wt.blockchainivest.domain.util.NumberUtil;
-import com.wt.blockchainivest.repository.dto.CoinSummaryDto;
 import com.wt.blockchainivest.repository.dto.EarningDto;
 import com.xiaoleilu.hutool.db.Entity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +16,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * @author wangtao
+ */
 @Component
 public class EarningDao extends BaseDao<EarningDto> implements EaringGatewayI {
 
@@ -24,8 +27,9 @@ public class EarningDao extends BaseDao<EarningDto> implements EaringGatewayI {
     @Autowired
     private CoinSummaryDao coinSummaryDao;
 
-    public List<EarningDto> query() {
-        List<EarningDto> result = new ArrayList<>();
+    @Override
+    public List<Earning> query() {
+        List<Earning> result = new ArrayList<>();
 
         try {
             // 查询最近的结算信息
@@ -33,7 +37,7 @@ public class EarningDao extends BaseDao<EarningDto> implements EaringGatewayI {
             String sql = "select * from tb_earning order by id desc";
             List<Entity> list = session.query(sql);
 
-            list.forEach(t -> result.add(t.toBeanIgnoreCase(EarningDto.class)));
+            list.forEach(t -> result.add(t.toBeanIgnoreCase(Earning.class)));
 
             session.commit();
         } catch (Exception e) {

@@ -1,9 +1,6 @@
 package com.wt.blockchainivest.api;
 
-import com.wt.blockchainivest.vo.CoinDetailVo;
-import com.wt.blockchainivest.vo.CoinInfoVo;
-import com.wt.blockchainivest.vo.CoinSummaryPageVo;
-import com.wt.blockchainivest.vo.ConstantsVo;
+import com.wt.blockchainivest.vo.*;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -84,5 +81,13 @@ public interface InvestApplicationI {
      * @return
      */
     List<CoinInfoVo> queryCoinInfo(String coinName);
+
+
+    /**
+     * 查询结算记录
+     *
+     * @return
+     */
+    List<EarningVo> query();
 
 }
