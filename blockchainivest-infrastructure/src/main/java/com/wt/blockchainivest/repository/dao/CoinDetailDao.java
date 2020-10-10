@@ -26,6 +26,7 @@ public class CoinDetailDao extends BaseDao<CoinDetailDto> implements CoinDetailG
     @Autowired
     private CoinSummaryDao coinSummaryDao;
 
+    @Override
     public String doCancel(String coinName) {
         String result = "";
         try {
@@ -66,16 +67,16 @@ public class CoinDetailDao extends BaseDao<CoinDetailDto> implements CoinDetailG
      *
      * @param coinName
      * @return
-     * @throws SQLException
      */
-    public List<CoinDetailDto> query(String coinName) {
-        List<CoinDetailDto> result = new ArrayList<>();
+    @Override
+    public List<CoinDetail> query(String coinName) {
+        List<CoinDetail> result = new ArrayList<>();
 
         try {
             String sql = "select * from tb_coin_detail where COIN_NAME = ? ORDER BY ID ";
             List<Entity> list = runner.query(sql, new Object[]{coinName});
 
-            list.forEach(en -> result.add(en.toBeanIgnoreCase(CoinDetailDto.class)));
+            list.forEach(en -> result.add(en.toBeanIgnoreCase(CoinDetail.class)));
         } catch (Exception e) {
             LogUtil.print("query err", e);
         }
@@ -184,6 +185,7 @@ public class CoinDetailDao extends BaseDao<CoinDetailDto> implements CoinDetailG
      * @param coinName
      * @throws Exception
      */
+    @Override
     public void doSettlement(String coinName) throws Exception {
         try {
             session.beginTransaction();

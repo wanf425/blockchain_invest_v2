@@ -151,6 +151,49 @@ public class InvestApplicationImpl implements InvestApplicationI {
         return reuslt;
     }
 
+    /**
+     * 查询明细数据
+     *
+     * @param coinName
+     * @return
+     * @throws SQLException
+     */
+    @Override
+    public List<CoinDetailVo> queryCoinDetail(String coinName) {
+        List<CoinDetail> list = coinDetailService.queryCoinDetail(coinName);
+        List<CoinDetailVo> result = new ArrayList<>();
+
+        if (list != null && list.size() > 0) {
+            for (CoinDetail detail : list) {
+                result.add(detail.toVo());
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * 撤销
+     *
+     * @param coinName
+     * @return
+     */
+    @Override
+    public String doCancel(String coinName) {
+        return coinDetailService.doCancel(coinName);
+    }
+
+    /**
+     * 结算
+     *
+     * @param coinName
+     * @throws Exception
+     */
+    @Override
+    public void doSettlement(String coinName) throws Exception {
+        coinDetailService.doSettlement(coinName);
+    }
+
     @Override
     public boolean doBackUp() {
         return coinDetailService.doBackUp();

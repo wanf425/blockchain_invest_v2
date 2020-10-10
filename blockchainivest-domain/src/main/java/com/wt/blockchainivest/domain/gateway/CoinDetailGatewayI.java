@@ -2,6 +2,7 @@ package com.wt.blockchainivest.domain.gateway;
 
 import com.wt.blockchainivest.domain.trasaction.CoinDetail;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -37,4 +38,28 @@ public interface CoinDetailGatewayI {
      * @return
      */
     void doSave(CoinDetail detail) throws Exception;
+
+    /**
+     * 查询明细数据
+     *
+     * @param coinName
+     * @return
+     */
+    List<CoinDetail> query(String coinName);
+
+    /**
+     * 撤销
+     *
+     * @param coinName
+     * @return
+     */
+    String doCancel(String coinName);
+
+    /**
+     * 结算
+     *
+     * @param coinName
+     * @throws Exception
+     */
+    void doSettlement(String coinName) throws Exception;
 }

@@ -69,6 +69,31 @@ public interface InvestApplicationI {
     void saveDetail(CoinDetailVo CoinDetailVo) throws Exception;
 
     /**
+     * 查询明细数据
+     *
+     * @param coinName
+     * @return
+     * @throws SQLException
+     */
+     List<CoinDetailVo> queryCoinDetail(String coinName);
+
+    /**
+     * 撤销
+     *
+     * @param coinName
+     * @return
+     */
+    String doCancel(String coinName);
+
+    /**
+     * 结算
+     *
+     * @param coinName
+     * @throws Exception
+     */
+    void doSettlement(String coinName) throws Exception;
+
+    /**
      * 批量修改代币基础信息
      *
      * @param list

@@ -36,4 +36,17 @@ public class CoinDetailService {
     public void save(CoinDetail detail) throws Exception {
         coinDetailDao.doSave(detail);
     }
+
+    public List<CoinDetail> queryCoinDetail(String coinName) {
+        return coinDetailDao.query(coinName);
+    }
+
+    public void doSettlement(String coinName) throws Exception {
+        coinDetailDao.doSettlement(coinName);
+    }
+
+    public String doCancel(String coinName) {
+        return coinDetailDao.doCancel(coinName);
+    }
+
 }

@@ -1,11 +1,11 @@
 package com.wt.blockchainivest.swing;
 
 import com.mysql.cj.util.StringUtils;
+import com.wt.blockchainivest.api.InvestApplicationI;
 import com.wt.blockchainivest.domain.util.CommonUtil;
 import com.wt.blockchainivest.domain.util.Constatns;
 import com.wt.blockchainivest.domain.util.NumberUtil;
-import com.wt.blockchainivest.repository.dao.CoinDetailDao;
-import com.wt.blockchainivest.repository.dto.CoinDetailDto;
+import com.wt.blockchainivest.vo.CoinDetailVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -31,7 +31,7 @@ public class HistoryWindow extends BaseWindow {
     @Autowired
     private RefundWindow refundWindow;
     @Autowired
-    private CoinDetailDao coinDetailDao;
+    private InvestApplicationI investApplicationImpl;
 
     private JFrame frame;
     private JLabel coinNameLA = new JLabel("代币：");
@@ -123,7 +123,8 @@ public class HistoryWindow extends BaseWindow {
 
     private void showHistory() {
         // 获取明细和汇总数据
-        List<CoinDetailDto> detailList = coinDetailDao.query(this.coinName);
+        List<CoinDetailVo> detailList =
+                investApplicationImpl.queryCoinDetail(this.coinName);
 
         List<String> printInfo = new ArrayList<>();
 
@@ -135,7 +136,7 @@ public class HistoryWindow extends BaseWindow {
         for (int i = 0; i < detailList.size(); i++) {
 
             StringBuffer sb = new StringBuffer("");
-            CoinDetailDto detail = detailList.get(i);
+            CoinDetailVo detail = detailList.get(i);
 
             sb.append("[" + CommonUtil.formateDate(detail.getCreate_Date()) + "]  ");
 
@@ -217,7 +218,7 @@ public class HistoryWindow extends BaseWindow {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    coinDetailDao.doSettlement(coinName);
+                    investApplicationImpl.doSettlement(coinName);
                     JOptionPane.showMessageDialog(null, "结算成功！");
                     showHistory();
                 } catch (Exception exc) {
@@ -231,7 +232,7 @@ public class HistoryWindow extends BaseWindow {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    String result = coinDetailDao.doCancel(coinName);
+                    String result = investApplicationImpl.doCancel(coinName);
                     JOptionPane.showMessageDialog(null, StringUtils.isNullOrEmpty(result) ? "撤销成功！" : "撤销失败," + result);
                     showHistory();
                 } catch (Exception exc) {
@@ -243,8 +244,10 @@ public class HistoryWindow extends BaseWindow {
 
         // 补差额
         refundBtn.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 EventQueue.invokeLater(new Runnable() {
+                    @Override
                     public void run() {
                         try {
                             refundWindow.initAndShow();
