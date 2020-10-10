@@ -49,4 +49,8 @@ public class CoinDetailService {
         return coinDetailDao.doCancel(coinName);
     }
 
+    public void putMonet(Double money) throws Exception {
+        coinDetailDao.putMonet(money);
+    }
+
 }

@@ -211,6 +211,11 @@ public class InvestApplicationImpl implements InvestApplicationI {
     }
 
     @Override
+    public void putMonet(Double money) throws Exception {
+        coinDetailService.putMonet(money);
+    }
+
+    @Override
     public List<EarningVo> query() {
         List<EarningVo> result = new ArrayList<>();
         List<Earning> list = earningService.query();

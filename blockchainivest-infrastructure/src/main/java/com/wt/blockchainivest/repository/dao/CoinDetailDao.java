@@ -62,12 +62,6 @@ public class CoinDetailDao extends BaseDao<CoinDetailDto> implements CoinDetailG
         return result;
     }
 
-    /**
-     * 查询明细数据
-     *
-     * @param coinName
-     * @return
-     */
     @Override
     public List<CoinDetail> query(String coinName) {
         List<CoinDetail> result = new ArrayList<>();
@@ -84,6 +78,7 @@ public class CoinDetailDao extends BaseDao<CoinDetailDto> implements CoinDetailG
         return result;
     }
 
+    @Override
     public void putMonet(Double money) throws Exception {
         try {
             session.beginTransaction();
@@ -103,12 +98,6 @@ public class CoinDetailDao extends BaseDao<CoinDetailDto> implements CoinDetailG
         }
     }
 
-    /**
-     * 补差额
-     *
-     * @param coinName
-     * @param refund
-     */
     public void doRefund(String coinName, Double refund, String remark) throws Exception {
         try {
             session.beginTransaction();

@@ -62,4 +62,12 @@ public interface CoinDetailGatewayI {
      * @throws Exception
      */
     void doSettlement(String coinName) throws Exception;
+
+    /**
+     * 资金投入
+     *
+     * @param money
+     * @throws Exception
+     */
+    void putMonet(Double money) throws Exception;
 }

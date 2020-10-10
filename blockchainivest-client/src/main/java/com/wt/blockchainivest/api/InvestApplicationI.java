@@ -77,6 +77,15 @@ public interface InvestApplicationI {
      */
      List<CoinDetailVo> queryCoinDetail(String coinName);
 
+
+    /**
+     * 资金投入
+     *
+     * @param money
+     * @throws Exception
+     */
+     void putMonet(Double money) throws Exception;
+
     /**
      * 撤销
      *
