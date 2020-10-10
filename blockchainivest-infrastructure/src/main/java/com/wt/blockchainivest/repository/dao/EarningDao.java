@@ -51,6 +51,7 @@ public class EarningDao extends BaseDao<EarningDto> implements EaringGatewayI {
     /**
      * 结算
      */
+    @Override
     public boolean calEarning() {
         boolean result = false;
 

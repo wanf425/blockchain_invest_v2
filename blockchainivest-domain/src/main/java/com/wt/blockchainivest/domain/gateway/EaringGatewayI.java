@@ -18,4 +18,9 @@ public interface EaringGatewayI {
      * @return
      */
     List<Earning> query();
+
+    /**
+     * 结算
+     */
+    boolean calEarning();
 }

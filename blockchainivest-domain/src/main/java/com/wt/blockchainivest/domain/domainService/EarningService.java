@@ -29,4 +29,11 @@ public class EarningService {
         return earingDao.query();
 
     }
+
+    /**
+     * 结算
+     */
+    public boolean calEarning() {
+        return earingDao.calEarning();
+    }
 }

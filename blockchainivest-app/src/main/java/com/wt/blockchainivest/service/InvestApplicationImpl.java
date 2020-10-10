@@ -180,5 +180,14 @@ public class InvestApplicationImpl implements InvestApplicationI {
 
         return result;
     }
+
+    /**
+     * 结算
+     */
+    @Override
+    public boolean calEarning() {
+        return earningService.calEarning();
+    }
+
 }
 

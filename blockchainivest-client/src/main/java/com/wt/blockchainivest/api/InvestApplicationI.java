@@ -22,6 +22,8 @@ public interface InvestApplicationI {
 
     /**
      * 更新所有汇总记录
+     *
+     * @throws SQLException
      */
     void updateAllSummary() throws SQLException;
 
@@ -89,5 +91,10 @@ public interface InvestApplicationI {
      * @return
      */
     List<EarningVo> query();
+
+    /**
+     * 结算
+     */
+    boolean calEarning();
 
 }
