@@ -6,8 +6,8 @@ import com.wt.blockchainivest.domain.util.CommonUtil;
 import com.wt.blockchainivest.domain.util.Constatns.ConstatnsKey;
 import com.wt.blockchainivest.domain.util.NumberUtil;
 import com.wt.blockchainivest.repository.dao.CoinDetailDao;
-import com.wt.blockchainivest.repository.dao.CoinSummaryDao;
-import com.wt.blockchainivest.repository.dto.CoinSummaryDto;
+import com.wt.blockchainivest.vo.CoinSummaryPageVo;
+import com.wt.blockchainivest.vo.CoinSummaryVo;
 import com.wt.blockchainivest.vo.ConstantsVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -31,8 +31,6 @@ public class RefundWindow extends BaseWindow {
     private final JTextField remarkTF = new JTextField();
     @Autowired
     private InvestApplicationI investApplicationImpl;
-    @Autowired
-    private CoinSummaryDao coinSummaryDao;
     @Autowired
     private CoinDetailDao coinDetailDao;
     private JFrame frame;
@@ -72,13 +70,15 @@ public class RefundWindow extends BaseWindow {
         frame.setVisible(true);
 
         ConstantsVo c = (ConstantsVo) coinNameCB.getSelectedItem();
-        List<CoinSummaryDto> csList = coinSummaryDao.query(c.getKey());
 
-        CoinSummaryDto coinSummaryDto = null;
+        CoinSummaryPageVo cpv = investApplicationImpl.querySummary(c.getKey());
+        List<CoinSummaryVo> csList = cpv.getSummaryList();
+
+        CoinSummaryVo cv = null;
         if (csList != null && csList.size() > 0) {
-            coinSummaryDto = csList.get(0);
+            cv = csList.get(0);
         }
-        currentCoinNumValue.setText(coinSummaryDto.getCoin_num().toString());
+        currentCoinNumValue.setText(cv.getCoin_num().toString());
         expectCoinNumTF.setText("");
         refundNumValue.setText("");
     }
@@ -202,7 +202,9 @@ public class RefundWindow extends BaseWindow {
     private void addListener() {
         coinNameCB.addItemListener(t -> {
             ConstantsVo c = (ConstantsVo) t.getItem();
-            List<CoinSummaryDto> csList = coinSummaryDao.query(c.getKey());
+
+            CoinSummaryPageVo cpv = investApplicationImpl.querySummary(c.getKey());
+            List<CoinSummaryVo> csList = cpv.getSummaryList();
 
             if (csList != null && csList.size() > 0) {
                 currentCoinNumValue.setText(csList.get(0).getCoin_num().toString());
@@ -238,7 +240,8 @@ public class RefundWindow extends BaseWindow {
                 }
 
                 ConstantsVo c = (ConstantsVo) coinNameCB.getSelectedItem();
-                coinDetailDao.doRefund(c.getKey(), Double.valueOf(refundNumValue.getText()), remarkTF.getText());
+                investApplicationImpl.doRefund(c.getKey(),
+                        Double.valueOf(refundNumValue.getText()), remarkTF.getText());
                 JOptionPane.showMessageDialog(null, "保存成功！");
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, ex.getMessage());

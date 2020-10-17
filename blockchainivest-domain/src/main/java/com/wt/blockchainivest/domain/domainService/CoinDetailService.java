@@ -53,4 +53,9 @@ public class CoinDetailService {
         coinDetailDao.putMonet(money);
     }
 
+
+    public void doRefund(String coinName, Double refund, String remark) throws Exception {
+        coinDetailDao.doRefund(coinName,refund,remark);
+    }
+
 }

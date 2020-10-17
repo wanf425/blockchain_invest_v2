@@ -227,6 +227,7 @@ public class HistoryWindow extends BaseWindow {
             }
         });
 
+        // 撤销
         cancelBtn.addActionListener(new ActionListener() {
 
             @Override

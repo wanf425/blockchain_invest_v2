@@ -70,4 +70,13 @@ public interface CoinDetailGatewayI {
      * @throws Exception
      */
     void putMonet(Double money) throws Exception;
+
+    /**
+     * 补差额
+     *
+     * @param coinName
+     * @param refund
+     * @param remark
+     */
+    void doRefund(String coinName, Double refund, String remark) throws Exception;
 }

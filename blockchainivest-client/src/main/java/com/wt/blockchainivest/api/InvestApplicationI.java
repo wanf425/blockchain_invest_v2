@@ -75,8 +75,17 @@ public interface InvestApplicationI {
      * @return
      * @throws SQLException
      */
-     List<CoinDetailVo> queryCoinDetail(String coinName);
+    List<CoinDetailVo> queryCoinDetail(String coinName);
 
+
+    /**
+     * 补差额
+     *
+     * @param coinName
+     * @param refund
+     * @param remark
+     */
+    void doRefund(String coinName, Double refund, String remark) throws Exception;
 
     /**
      * 资金投入
@@ -84,7 +93,7 @@ public interface InvestApplicationI {
      * @param money
      * @throws Exception
      */
-     void putMonet(Double money) throws Exception;
+    void putMonet(Double money) throws Exception;
 
     /**
      * 撤销

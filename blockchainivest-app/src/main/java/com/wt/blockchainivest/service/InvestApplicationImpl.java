@@ -152,6 +152,18 @@ public class InvestApplicationImpl implements InvestApplicationI {
     }
 
     /**
+     * 补差额
+     *
+     * @param coinName
+     * @param refund
+     * @param remark
+     */
+    @Override
+    public void doRefund(String coinName, Double refund, String remark) throws Exception {
+        coinDetailService.doRefund(coinName, refund, remark);
+    }
+
+    /**
      * 查询明细数据
      *
      * @param coinName

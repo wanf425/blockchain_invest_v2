@@ -98,6 +98,7 @@ public class CoinDetailDao extends BaseDao<CoinDetailDto> implements CoinDetailG
         }
     }
 
+    @Override
     public void doRefund(String coinName, Double refund, String remark) throws Exception {
         try {
             session.beginTransaction();
