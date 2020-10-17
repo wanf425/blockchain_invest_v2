@@ -5,7 +5,6 @@ import com.wt.blockchainivest.api.InvestApplicationI;
 import com.wt.blockchainivest.domain.util.CommonUtil;
 import com.wt.blockchainivest.domain.util.Constatns.ConstatnsKey;
 import com.wt.blockchainivest.domain.util.NumberUtil;
-import com.wt.blockchainivest.repository.dao.CoinDetailDao;
 import com.wt.blockchainivest.vo.CoinSummaryPageVo;
 import com.wt.blockchainivest.vo.CoinSummaryVo;
 import com.wt.blockchainivest.vo.ConstantsVo;
@@ -31,8 +30,6 @@ public class RefundWindow extends BaseWindow {
     private final JTextField remarkTF = new JTextField();
     @Autowired
     private InvestApplicationI investApplicationImpl;
-    @Autowired
-    private CoinDetailDao coinDetailDao;
     private JFrame frame;
     // 预期数量文本框
     private JTextField expectCoinNumTF;
