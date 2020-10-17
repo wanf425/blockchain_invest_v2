@@ -3,8 +3,6 @@ package com.wt.blockchainivest.repository.dto;
 import com.wt.blockchainivest.domain.trasaction.CoinDetail;
 import lombok.Data;
 
-import java.util.Date;
-
 /**
  * 交易明细
  *

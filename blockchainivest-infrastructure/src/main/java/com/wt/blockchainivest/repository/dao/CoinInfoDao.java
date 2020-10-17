@@ -51,7 +51,7 @@ public class CoinInfoDao extends BaseDao<CoinInfoDto> implements CoinInfoGateway
         try {
             List<Entity> list = new ArrayList<>();
 
-            if(StringUtils.isEmpty(coinName)) {
+            if (StringUtils.isEmpty(coinName)) {
                 list = runner.findAll(Entity.create("tc_coin_info"));
             } else {
                 list = runner.findAll(Entity.create("tc_coin_info").set("COIN_NAME", coinName));

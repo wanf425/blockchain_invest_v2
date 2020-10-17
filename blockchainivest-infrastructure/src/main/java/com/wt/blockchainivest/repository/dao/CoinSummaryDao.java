@@ -2,13 +2,12 @@ package com.wt.blockchainivest.repository.dao;
 
 import com.mysql.cj.util.StringUtils;
 import com.wt.blockchainivest.domain.gateway.CoinSummaryGatewayI;
+import com.wt.blockchainivest.domain.trasaction.CoinInfo;
 import com.wt.blockchainivest.domain.trasaction.CoinSummary;
 import com.wt.blockchainivest.domain.util.CommonUtil;
 import com.wt.blockchainivest.domain.util.Constatns;
 import com.wt.blockchainivest.domain.util.LogUtil;
 import com.wt.blockchainivest.domain.util.NumberUtil;
-import com.wt.blockchainivest.domain.trasaction.CoinInfo;
-import com.wt.blockchainivest.repository.dto.CoinInfoDto;
 import com.wt.blockchainivest.repository.dto.CoinSummaryDto;
 import com.xiaoleilu.hutool.bean.BeanUtil;
 import com.xiaoleilu.hutool.db.Entity;
@@ -175,7 +174,7 @@ public class CoinSummaryDao extends BaseDao<CoinSummaryDto> implements CoinSumma
             }
 
             CoinInfo coinInfo = new CoinInfo();
-            BeanUtil.copyProperties(coinInfos.get(cs.getMonetary_unit()),coinInfo);
+            BeanUtil.copyProperties(coinInfos.get(cs.getMonetary_unit()), coinInfo);
             Double totalCost = getCost(cs.getTotal_cost(), coinInfo);
             Double serviceCharge = getCost(cs.getService_charge(), coinInfo);
 
