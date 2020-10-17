@@ -4,6 +4,7 @@ import com.mysql.cj.util.StringUtils;
 import com.wt.blockchainivest.api.InvestApplicationI;
 import com.wt.blockchainivest.domain.util.CommonUtil;
 import com.wt.blockchainivest.domain.util.Constatns;
+import com.wt.blockchainivest.domain.util.LogUtil;
 import com.wt.blockchainivest.domain.util.NumberUtil;
 import com.wt.blockchainivest.vo.CoinDetailVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -212,15 +213,17 @@ public class HistoryWindow extends BaseWindow {
         }
     }
 
-    private void addListener() {
+    @Override
+    protected void addWindowlistener(Object... args) {
         // 结算
         settelmentBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
                     investApplicationImpl.doSettlement(coinName);
-                    JOptionPane.showMessageDialog(null, "结算成功！");
                     showHistory();
+                    LogUtil.print("11111");
+                    // JOptionPane.showMessageDialog(null, "结算成功！");
                 } catch (Exception exc) {
                     JOptionPane.showMessageDialog(null, exc.getMessage());
                 }
@@ -234,8 +237,8 @@ public class HistoryWindow extends BaseWindow {
             public void actionPerformed(ActionEvent e) {
                 try {
                     String result = investApplicationImpl.doCancel(coinName);
-                    JOptionPane.showMessageDialog(null, StringUtils.isNullOrEmpty(result) ? "撤销成功！" : "撤销失败," + result);
                     showHistory();
+                    JOptionPane.showMessageDialog(null, StringUtils.isNullOrEmpty(result) ? "撤销成功！" : "撤销失败," + result);
                 } catch (Exception exc) {
                     JOptionPane.showMessageDialog(null, "撤销失败！" + exc.getMessage());
                 }

@@ -4,10 +4,8 @@ package com.wt.blockchainivest.swing;
 import com.wt.blockchainivest.api.InvestApplicationI;
 import com.wt.blockchainivest.domain.util.CommonUtil;
 import com.wt.blockchainivest.domain.util.Constatns;
-import com.wt.blockchainivest.domain.util.Constatns.ConstatnsKey;
 import com.wt.blockchainivest.domain.util.NumberUtil;
 import com.wt.blockchainivest.vo.CoinDetailVo;
-import com.wt.blockchainivest.vo.ConstantsVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -31,7 +29,7 @@ public class BackupWindow extends BaseWindow {
     @Autowired
     private BuySellStreamWindow buySellStreamWindow;
 
-    private JFrame frame;
+    private JFrame frame = new JFrame();
     private JButton backupBtn = new JButton("备份");
     private JButton rollbackBtn = new JButton("回滚");
 
@@ -90,24 +88,26 @@ public class BackupWindow extends BaseWindow {
         frame.getContentPane().setLayout(groupLayout);
 
         initDate();
-        addlistener();
+        addListener();
     }
 
-    private void addlistener() {
+    @Override
+    protected void addWindowlistener(Object... args) {
+
         // 备份
         backupBtn.addActionListener(t -> {
             boolean result = investApplicationImpl.doBackUp();
-            JOptionPane.showMessageDialog(null, result ? "备份成功！" : "备份失败！");
             refresh();
             buySellStreamWindow.doQuery();
+            JOptionPane.showMessageDialog(null, result ? "备份成功！" : "备份失败！");
         });
 
         // 回滚
         rollbackBtn.addActionListener(t -> {
             boolean result = investApplicationImpl.doRollBack();
-            JOptionPane.showMessageDialog(null, result ? "回滚成功！" : "回滚失败！");
             refresh();
             buySellStreamWindow.doQuery();
+            JOptionPane.showMessageDialog(null, result ? "回滚成功！" : "回滚失败！");
         });
     }
 

@@ -46,6 +46,8 @@ public class CoinDetailService {
     }
 
     public String doCancel(String coinName) {
+
+
         return coinDetailDao.doCancel(coinName);
     }
 

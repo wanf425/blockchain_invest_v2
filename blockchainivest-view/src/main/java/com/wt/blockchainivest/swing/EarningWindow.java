@@ -99,7 +99,8 @@ public class EarningWindow extends BaseWindow {
         table.updateUI();
     }
 
-    private void addListener() {
+    @Override
+    protected void addWindowlistener(Object... args) {
         button.addActionListener(t -> {
             boolean result = investApplicationImpl.calEarning();
             JOptionPane.showMessageDialog(null, result ? "操作成功！" : "操作失败！");

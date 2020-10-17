@@ -18,6 +18,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * @author wangtao
+ */
 @Component
 public class CoinDetailDao extends BaseDao<CoinDetailDto> implements CoinDetailGatewayI {
     @Autowired

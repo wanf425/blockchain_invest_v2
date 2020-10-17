@@ -249,7 +249,8 @@ public class BuySellStreamWindow extends BaseWindow {
     /**
      * 添加监听
      */
-    private void addListener() {
+    @Override
+    protected void addWindowlistener(Object... args) {
         BuySellStreamWindow window = this;
 
         // 查询按钮

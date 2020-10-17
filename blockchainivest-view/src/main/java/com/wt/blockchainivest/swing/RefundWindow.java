@@ -196,7 +196,8 @@ public class RefundWindow extends BaseWindow {
     /**
      * 条件监听事件
      */
-    private void addListener() {
+    @Override
+    protected void addWindowlistener(Object... args) {
         coinNameCB.addItemListener(t -> {
             ConstantsVo c = (ConstantsVo) t.getItem();
 

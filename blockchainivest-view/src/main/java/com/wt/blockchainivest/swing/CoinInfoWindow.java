@@ -53,6 +53,39 @@ public class CoinInfoWindow extends BaseWindow {
     }
 
     @Override
+    protected void addWindowlistener(Object... args) {
+        formateBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cionInfoEP.setText(CommonUtil.formatJson(cionInfoEP.getText()));
+            }
+        });
+
+        saveBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    Gson gson = new Gson();
+                    List<CoinInfoVo> list = gson.fromJson(cionInfoEP.getText()
+                            , new TypeToken<List<CoinInfoVo>>() {
+                            }.getType());
+                    investApplicationImpl.updateCoinInfos(list);
+
+                    JOptionPane.showMessageDialog(null, "保存成功");
+                    initDate();
+                    if (buySellStreamWindow != null) {
+                        buySellStreamWindow.doQuery();
+                        investApplicationImpl.updateAllSummary();
+                    }
+                } catch (Exception exc) {
+                    JOptionPane.showMessageDialog(null, "保存失败");
+                    LogUtil.print("", exc);
+                }
+            }
+        });
+    }
+
+    @Override
     public void initAndShow(Object... args) {
         initialize();
         frame.setVisible(true);
@@ -89,39 +122,6 @@ public class CoinInfoWindow extends BaseWindow {
 
         initDate();
         addListener();
-    }
-
-    private void addListener() {
-        formateBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                cionInfoEP.setText(CommonUtil.formatJson(cionInfoEP.getText()));
-            }
-        });
-
-        saveBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    Gson gson = new Gson();
-                    List<CoinInfoVo> list = gson.fromJson(cionInfoEP.getText()
-                            , new TypeToken<List<CoinInfoVo>>() {
-                            }.getType());
-                    investApplicationImpl.updateCoinInfos(list);
-
-                    JOptionPane.showMessageDialog(null, "保存成功");
-                    initDate();
-                    if (buySellStreamWindow != null) {
-                        buySellStreamWindow.doQuery();
-                        investApplicationImpl.updateAllSummary();
-                    }
-                } catch (Exception exc) {
-                    JOptionPane.showMessageDialog(null, "保存失败");
-                    LogUtil.print("", exc);
-                }
-            }
-        });
-
     }
 
     private void initDate() {

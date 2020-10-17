@@ -254,7 +254,8 @@ public class BuySellRecordsWindow extends BaseWindow {
     /**
      * 条件监听事件
      */
-    private void addListener() {
+    @Override
+    protected void addWindowlistener(Object... args) {
         // 操作下拉框
         opTypeCB.addItemListener(e -> changeAccountNum());
         // 币种下拉框
