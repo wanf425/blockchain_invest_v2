@@ -25,4 +25,9 @@ public interface CoinSummaryGatewayI {
      * 更新所有汇总记录
      */
      void updateAllSummary() throws SQLException;
+
+    /**
+     * 更新指定币种的汇总记录
+     */
+    void updateSummary(String coinName) throws SQLException;
 }

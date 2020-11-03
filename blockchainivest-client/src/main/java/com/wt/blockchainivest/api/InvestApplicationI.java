@@ -28,6 +28,13 @@ public interface InvestApplicationI {
     void updateAllSummary() throws SQLException;
 
     /**
+     * 更新指定币种的汇总记录
+     *
+     * @throws SQLException
+     */
+    void updateSummary(String coinName) throws SQLException;
+
+    /**
      * 查询人币汇率
      *
      * @return

@@ -70,13 +70,11 @@ public class CoinInfoWindow extends BaseWindow {
                             , new TypeToken<List<CoinInfoVo>>() {
                             }.getType());
                     investApplicationImpl.updateCoinInfos(list);
+                    investApplicationImpl.updateAllSummary();
 
                     JOptionPane.showMessageDialog(null, "保存成功");
                     initDate();
-                    if (buySellStreamWindow != null) {
-                        buySellStreamWindow.doQuery();
-                        investApplicationImpl.updateAllSummary();
-                    }
+                    buySellStreamWindow.doQuery();
                 } catch (Exception exc) {
                     JOptionPane.showMessageDialog(null, "保存失败");
                     LogUtil.print("", exc);

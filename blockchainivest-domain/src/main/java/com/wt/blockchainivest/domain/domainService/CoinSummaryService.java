@@ -24,10 +24,11 @@ public class CoinSummaryService {
         return coinSummaryDao.querySummary(coinName);
     }
 
-    /**
-     * 更新所有汇总记录
-     */
     public void updateAllSummary() throws SQLException {
+        coinSummaryDao.updateAllSummary();
+    }
+
+    public void updateSummary(String coinName) throws SQLException {
         coinSummaryDao.updateAllSummary();
     }
 }

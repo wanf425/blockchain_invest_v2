@@ -96,6 +96,14 @@ public class CoinSummaryDao extends BaseDao<CoinSummaryDto> implements CoinSumma
     }
 
     /**
+     * 更新指定币种的汇总记录
+     */
+    @Override
+    public void updateSummary(String coinName) throws SQLException {
+        updateSummary(coinName, true);
+    }
+
+    /**
      * 查询汇总数据
      *
      * @return
@@ -157,7 +165,7 @@ public class CoinSummaryDao extends BaseDao<CoinSummaryDto> implements CoinSumma
 
     private void doUpdateSummary(String coinName) throws SQLException {
         String sql = "SELECT OP_TYPE,COIN_NUM,TOTAL_COST,SERVICE_CHARGE,MONETARY_UNIT "
-                + " FROM tb_coin_detail WHERE SETTLEMENT_VERSION is null and COIN_NAME = ? ";
+                + " FROM tb_coin_detail WHERE IS_SETTLEMENT is null and COIN_NAME = ? ";
 
         List<Entity> list = session.query(sql, new Object[]{coinName});
 

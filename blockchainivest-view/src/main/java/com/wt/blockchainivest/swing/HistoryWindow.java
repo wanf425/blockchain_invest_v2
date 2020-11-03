@@ -4,7 +4,6 @@ import com.mysql.cj.util.StringUtils;
 import com.wt.blockchainivest.api.InvestApplicationI;
 import com.wt.blockchainivest.domain.util.CommonUtil;
 import com.wt.blockchainivest.domain.util.Constatns;
-import com.wt.blockchainivest.domain.util.LogUtil;
 import com.wt.blockchainivest.domain.util.NumberUtil;
 import com.wt.blockchainivest.vo.CoinDetailVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +31,8 @@ public class HistoryWindow extends BaseWindow {
     @Autowired
     private RefundWindow refundWindow;
     @Autowired
+    private BuySellStreamWindow buySellStreamWindow;
+    @Autowired
     private InvestApplicationI investApplicationImpl;
 
     private JFrame frame;
@@ -39,6 +40,7 @@ public class HistoryWindow extends BaseWindow {
     private JLabel coinNameLA2 = new JLabel("coinName");
     private JButton settelmentBtn = new JButton("结算");
     private JButton cancelBtn = new JButton("撤销");
+    private JButton recalculateSummaryBtn = new JButton("重算汇总");
     private JTextPane historyTF = new JTextPane();
     private JScrollPane jsp = new JScrollPane(historyTF);
     private String coinName;
@@ -98,13 +100,14 @@ public class HistoryWindow extends BaseWindow {
                                         .addPreferredGap(ComponentPlacement.RELATED).addComponent(coinNameLA2)
                                         .addPreferredGap(ComponentPlacement.RELATED).addComponent(settelmentBtn)
                                         .addPreferredGap(ComponentPlacement.RELATED).addComponent(cancelBtn)
-                                        .addPreferredGap(ComponentPlacement.RELATED).addComponent(refundBtn)))
+                                        .addPreferredGap(ComponentPlacement.RELATED).addComponent(refundBtn)
+                                        .addPreferredGap(ComponentPlacement.RELATED).addComponent(recalculateSummaryBtn)))
                         .addContainerGap(19, Short.MAX_VALUE)));
         groupLayout.setVerticalGroup(groupLayout.createParallelGroup(Alignment.LEADING)
                 .addGroup(groupLayout.createSequentialGroup().addGap(14)
                         .addGroup(groupLayout.createParallelGroup(Alignment.BASELINE).addComponent(settelmentBtn)
                                 .addComponent(coinNameLA).addComponent(coinNameLA2).addComponent(cancelBtn)
-                                .addComponent(refundBtn))
+                                .addComponent(refundBtn).addComponent(recalculateSummaryBtn))
                         .addPreferredGap(ComponentPlacement.RELATED)
                         .addComponent(jsp, GroupLayout.PREFERRED_SIZE, 420, GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(109, Short.MAX_VALUE)));
@@ -215,6 +218,18 @@ public class HistoryWindow extends BaseWindow {
 
     @Override
     protected void addWindowlistener(Object... args) {
+        // 重算汇总
+        recalculateSummaryBtn.addActionListener(event -> {
+            try {
+                investApplicationImpl.updateSummary(coinName);
+                buySellStreamWindow.doQuery();
+                JOptionPane.showMessageDialog(null, "操作成功！");
+            } catch (Exception exc) {
+                JOptionPane.showMessageDialog(null, exc.getMessage());
+            }
+        });
+
+
         // 结算
         settelmentBtn.addActionListener(new ActionListener() {
             @Override
@@ -222,8 +237,7 @@ public class HistoryWindow extends BaseWindow {
                 try {
                     investApplicationImpl.doSettlement(coinName);
                     showHistory();
-                    LogUtil.print("11111");
-                    // JOptionPane.showMessageDialog(null, "结算成功！");
+                    JOptionPane.showMessageDialog(null, "结算成功！");
                 } catch (Exception exc) {
                     JOptionPane.showMessageDialog(null, exc.getMessage());
                 }

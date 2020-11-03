@@ -76,6 +76,16 @@ public class InvestApplicationImpl implements InvestApplicationI {
     }
 
     /**
+     * 更新指定币种的汇总记录
+     *
+     * @throws SQLException
+     */
+    @Override
+    public void updateSummary(String coinName) throws SQLException {
+        coinSummaryService.updateSummary(coinName);
+
+    }
+    /**
      * 查询人币汇率
      *
      * @return
