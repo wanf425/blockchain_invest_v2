@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -64,8 +65,13 @@ public class EarningDao extends BaseDao<EarningDto> implements EaringGatewayI {
             Double totalInvest = 0.0;
             Double currentInvest = 0.0;
             Double increase_rate = 0.0;
+            Double increase_rate_monthly = 0.0;
+            Double increase_rate_yearly = 0.0;
             Double totalValue = 0.0;
             Double lastValue = 0.0;
+            Date current = new Date();
+            Integer lastMonthIndex = null;
+            Integer lastYearIndex = null;
 
             // 查询上次结算后的投资信息
             sql = " select if(sum(TOTAL_COST) is null,0.0,sum(TOTAL_COST)) as currentInvest from tb_coin_detail where coin_name = ? and op_type = ? and op_time > ? ";
@@ -79,6 +85,32 @@ public class EarningDao extends BaseDao<EarningDto> implements EaringGatewayI {
                 param.add(earningInfo.getSettlement_date());
                 totalInvest = earningInfo.getTotal_invest();
                 lastValue = earningInfo.getTotal_value();
+
+                Date lastMothDate = getLastMonth();
+                Date lastYearDate = getLastYear();
+
+                // 获取上个月和去年最近的统计信息下标
+                for (int i = 0; i < list.size(); i++) {
+                    EarningDto comparedEarningDto =
+                            list.get(i).toBeanIgnoreCase(EarningDto.class);
+
+                    if (lastMonthIndex != null && lastYearIndex != null) {
+                        break;
+                    }
+
+
+                    // 获取上个月（最近）的统计信息下标
+                    if (lastMonthIndex == null &&
+                            lastMothDate.getTime() >= comparedEarningDto.getSettlement_date().getTime()) {
+                        lastMonthIndex = i;
+                    }
+
+                    // 获取去年（最近）的统计信息下标
+                    if (lastYearIndex == null &&
+                            lastYearDate.getTime() >= comparedEarningDto.getSettlement_date().getTime()) {
+                        lastYearIndex = i;
+                    }
+                }
             } else {
                 param.add("2018-01-02");
                 totalInvest = 20000.0;
@@ -104,10 +136,24 @@ public class EarningDao extends BaseDao<EarningDto> implements EaringGatewayI {
                         .formateNumDouble(NumberUtil.divide(totalValue - currentInvest, lastValue, 0.0)) - 1;
             }
 
+            // 增长率(与上个月统计相比）
+            if (lastMonthIndex != null) {
+                increase_rate_monthly = getLastIncreaseRate(list, totalValue,
+                        lastMonthIndex);
+            }
+
+            if (lastYearIndex != null) {
+                increase_rate_yearly = getLastIncreaseRate(list, totalValue,
+                        lastYearIndex);
+            }
+
+            // 增长率(与去年相比）
+
             // 插入结算信息
-            Entity entity = Entity.create("tb_earning").set("settlement_date", new Date())
+            Entity entity = Entity.create("tb_earning").set("settlement_date", current)
                     .set("total_invest", totalInvest).set("current_invest", currentInvest)
-                    .set("increase_rate", increase_rate).set("total_value", totalValue);
+                    .set("increase_rate", increase_rate).set("total_value",
+                            totalValue).set("increase_rate_monthly", increase_rate_monthly).set("increase_rate_yearly", increase_rate_yearly);
 
             session.insert(entity);
 
@@ -119,5 +165,38 @@ public class EarningDao extends BaseDao<EarningDto> implements EaringGatewayI {
         }
 
         return result;
+    }
+
+    private Double getLastIncreaseRate(List<Entity> list, Double totalValue,
+                                       Integer lastMonthIndex) {
+        Double invest = 0.0;
+        Double value = 0.0;
+        for (int i = 0; i <= lastMonthIndex; i++) {
+            EarningDto earningInfo =
+                    list.get(i).toBeanIgnoreCase(EarningDto.class);
+            invest += earningInfo.getCurrent_invest();
+            value = earningInfo.getTotal_value();
+        }
+
+        return NumberUtil
+                .formateNumDouble(NumberUtil.divide(totalValue - invest, value, 0.0)) - 1;
+    }
+
+    public Date getLastMonth() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH) - 1);
+        calendar.set(Calendar.DAY_OF_MONTH,
+                calendar.get(Calendar.DAY_OF_MONTH) + 1);
+        return calendar.getTime();
+    }
+
+    public Date getLastYear() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR) - 1);
+        calendar.set(Calendar.DAY_OF_MONTH,
+                calendar.get(Calendar.DAY_OF_MONTH) + 1);
+        return calendar.getTime();
     }
 }

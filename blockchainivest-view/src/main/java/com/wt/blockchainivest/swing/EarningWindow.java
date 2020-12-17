@@ -66,7 +66,7 @@ public class EarningWindow extends BaseWindow {
      */
     private void initialize() {
         frame = new JFrame();
-        frame.setBounds(100, 100, 510, 300);
+        frame.setBounds(100, 100, 600, 300);
         resetFrame(frame);
 
         table = new JTable();
@@ -81,7 +81,8 @@ public class EarningWindow extends BaseWindow {
                 .createSequentialGroup().addContainerGap()
                 .addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
                         .addGroup(groupLayout.createSequentialGroup().addGap(6).addComponent(jsp,
-                                GroupLayout.PREFERRED_SIZE, 483, GroupLayout.PREFERRED_SIZE))
+                                GroupLayout.PREFERRED_SIZE, 590,
+                                GroupLayout.PREFERRED_SIZE))
                         .addComponent(button))
                 .addContainerGap(15, Short.MAX_VALUE)));
         groupLayout.setVerticalGroup(groupLayout.createParallelGroup(Alignment.LEADING)
@@ -112,7 +113,8 @@ public class EarningWindow extends BaseWindow {
     public AbstractTableModel getTableModel() {
         return new AbstractTableModel() {
             private static final long serialVersionUID = 4354562018087682852L;
-            String[] names = {"结算日期", "总投入", "当期投入", "总市值", "增长率(去当期)"};
+            String[] names = {"结算日期", "总投入", "当期投入", "总市值", "增长率",
+                    "增长率月度", "增长率年度"};
 
             @Override
             @SuppressWarnings("rawtypes")
@@ -158,6 +160,24 @@ public class EarningWindow extends BaseWindow {
                     }
                     case (4): {
                         return NumberUtil.formateNum(getData().get(row).getIncrease_rate() * 100) + "%";
+                    }
+                    case (5): {
+                        Double mothlyRate =
+                                getData().get(row).getIncrease_rate_monthly();
+                        if (mothlyRate != null) {
+                            return NumberUtil.formateNum(mothlyRate * 100) + "%";
+                        } else {
+                            return "";
+                        }
+                    }
+                    case (6): {
+                        Double yealyRate =
+                                getData().get(row).getIncrease_rate_yearly();
+                        if (yealyRate != null) {
+                            return NumberUtil.formateNum(yealyRate * 100) + "%";
+                        } else {
+                            return "";
+                        }
                     }
                     default:
                         return "";
